@@ -1,0 +1,32 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: "Africa/Kigali"
+    open-pull-requests-limit: 5
+    groups:
+      next:
+        patterns: ["next", "@next/*", "eslint-config-next"]
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      radix:
+        patterns: ["@radix-ui/*"]
+      gsap:
+        patterns: ["gsap", "@gsap/*"]
+      sentry:
+        patterns: ["@sentry/*"]
+      testing:
+        patterns: ["vitest", "@vitest/*", "playwright", "@playwright/*", "@testing-library/*"]
+    commit-message:
+      prefix: "chore"
+      include: scope
+    labels: ["dependencies"]
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule: { interval: monthly }
+    commit-message: { prefix: "ci" }
+    labels: ["dependencies", "ci"]
