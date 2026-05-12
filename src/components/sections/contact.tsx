@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGSAP } from "@gsap/react";
 import { toast } from "sonner";
+import Cal, { getCalApi } from "@calcom/embed-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
@@ -12,24 +13,16 @@ import { contactSchema, type ContactInput } from "@/lib/contact-schema";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SfWatermark } from "@/components/sf-watermark";
 import { cn } from "@/lib/utils";
+
+const CAL_NAMESPACE = "15min";
+const CAL_LINK = "stackforgeai/15min";
 
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
   const { t } = useLang();
-  const [sent, setSent] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<ContactInput>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", email: "", company: "", message: "", website: "" },
-    mode: "onBlur",
-  });
 
   useGSAP(
     () => {
@@ -46,30 +39,6 @@ export function Contact() {
     },
     { scope: ref },
   );
-
-  const onSubmit = async (data: ContactInput) => {
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (res.status === 429) {
-        toast.error("Too many requests. Please try again in an hour.");
-        return;
-      }
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? t("contact.error"));
-      }
-      setSent(true);
-      toast.success(t("contact.sent"));
-      reset();
-    } catch (err) {
-      console.error(err);
-      toast.error(err instanceof Error ? err.message : t("contact.error.network"));
-    }
-  };
 
   return (
     <section id="contact" ref={ref} className="relative overflow-hidden py-20 sm:py-24 lg:py-32">
@@ -196,104 +165,209 @@ export function Contact() {
           </div>
         </div>
 
-        <form
-          data-contact
-          noValidate
-          onSubmit={handleSubmit(onSubmit)}
-          className="glass space-y-5 rounded-3xl p-8 lg:col-span-7 lg:p-10"
-          aria-label="Contact form"
-        >
-          {/* Honeypot — invisible to humans, irresistible to bots */}
-          <input
-            type="text"
-            autoComplete="off"
-            tabIndex={-1}
-            aria-hidden
-            {...register("website")}
-            className="absolute -left-[9999px] h-0 w-0 opacity-0"
-          />
+        <div data-contact className="lg:col-span-7">
+          <Tabs defaultValue="talk" className="w-full">
+            <TabsList aria-label="Contact options">
+              <TabsTrigger value="talk">
+                <CalendarIcon />
+                {t("contact.tab.talk")}
+              </TabsTrigger>
+              <TabsTrigger value="message">
+                <MailIcon />
+                {t("contact.tab.message")}
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            <Field
-              label={t("contact.field.name")}
-              error={errors.name?.message}
-              inputId="contact-name"
-            >
-              <Input
-                id="contact-name"
-                autoComplete="name"
-                aria-invalid={!!errors.name}
-                aria-describedby={errors.name ? "contact-name-err" : undefined}
-                placeholder={t("contact.field.name")}
-                {...register("name")}
-              />
-            </Field>
-            <Field
-              label={t("contact.field.email")}
-              error={errors.email?.message}
-              inputId="contact-email"
-            >
-              <Input
-                id="contact-email"
-                type="email"
-                autoComplete="email"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? "contact-email-err" : undefined}
-                placeholder={t("contact.field.email")}
-                {...register("email")}
-              />
-            </Field>
-          </div>
-          <Field
-            label={t("contact.field.company")}
-            error={errors.company?.message}
-            inputId="contact-company"
-          >
-            <Input
-              id="contact-company"
-              autoComplete="organization"
-              aria-invalid={!!errors.company}
-              placeholder={t("contact.field.company")}
-              {...register("company")}
-            />
-          </Field>
-          <Field
-            label={t("contact.field.message")}
-            error={errors.message?.message}
-            inputId="contact-message"
-          >
-            <Textarea
-              id="contact-message"
-              rows={5}
-              aria-invalid={!!errors.message}
-              aria-describedby={errors.message ? "contact-message-err" : undefined}
-              placeholder={t("contact.field.placeholder")}
-              {...register("message")}
-            />
-          </Field>
-          <button
-            type="submit"
-            disabled={isSubmitting || sent}
-            className={cn(
-              "btn-press group bg-primary text-primary-foreground glow-green focus-visible:ring-primary/70 focus-visible:ring-offset-background inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-3.5 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-70 disabled:hover:translate-y-0 sm:w-auto",
-            )}
-          >
-            {sent ? (
-              t("contact.sent")
-            ) : isSubmitting ? (
-              t("contact.sending")
-            ) : (
-              <>
-                {t("contact.send")}
-                <span aria-hidden className="btn-arrow">
-                  →
-                </span>
-              </>
-            )}
-          </button>
-        </form>
+            <TabsContent value="talk" className="glass overflow-hidden rounded-3xl p-2 sm:p-3">
+              <CalEmbed fallbackLabel={t("contact.tab.cal.fallback")} />
+            </TabsContent>
+
+            <TabsContent value="message">
+              <ContactForm />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </section>
+  );
+}
+
+function CalEmbed({ fallbackLabel }: { fallbackLabel: string }) {
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const cal = await getCalApi({ namespace: CAL_NAMESPACE });
+        if (cancelled) return;
+        cal("ui", {
+          cssVarsPerTheme: {
+            light: { "cal-brand": "#040e17" },
+            dark: { "cal-brand": "#39ff24" },
+          },
+          hideEventTypeDetails: false,
+          layout: "month_view",
+        });
+      } catch (err) {
+        console.error("Cal.com embed init failed", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div
+      className="relative min-h-[640px] w-full overflow-hidden rounded-2xl sm:min-h-[720px]"
+      role="region"
+      aria-label="Booking calendar"
+    >
+      <div
+        aria-hidden
+        className="text-muted-foreground absolute inset-0 flex items-center justify-center text-sm"
+      >
+        {fallbackLabel}
+      </div>
+      <Cal
+        namespace={CAL_NAMESPACE}
+        calLink={CAL_LINK}
+        style={{ width: "100%", height: "100%", overflow: "auto", position: "relative", zIndex: 1 }}
+        config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true" }}
+      />
+    </div>
+  );
+}
+
+function ContactForm() {
+  const { t } = useLang();
+  const [sent, setSent] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ContactInput>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: "", email: "", company: "", message: "", website: "" },
+    mode: "onBlur",
+  });
+
+  const onSubmit = async (data: ContactInput) => {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.status === 429) {
+        toast.error("Too many requests. Please try again in an hour.");
+        return;
+      }
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? t("contact.error"));
+      }
+      setSent(true);
+      toast.success(t("contact.sent"));
+      reset();
+    } catch (err) {
+      console.error(err);
+      toast.error(err instanceof Error ? err.message : t("contact.error.network"));
+    }
+  };
+
+  return (
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="glass space-y-5 rounded-3xl p-8 lg:p-10"
+      aria-label="Contact form"
+    >
+      <input
+        type="text"
+        autoComplete="off"
+        tabIndex={-1}
+        aria-hidden
+        {...register("website")}
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field label={t("contact.field.name")} error={errors.name?.message} inputId="contact-name">
+          <Input
+            id="contact-name"
+            autoComplete="name"
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? "contact-name-err" : undefined}
+            placeholder={t("contact.field.name")}
+            {...register("name")}
+          />
+        </Field>
+        <Field
+          label={t("contact.field.email")}
+          error={errors.email?.message}
+          inputId="contact-email"
+        >
+          <Input
+            id="contact-email"
+            type="email"
+            autoComplete="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "contact-email-err" : undefined}
+            placeholder={t("contact.field.email")}
+            {...register("email")}
+          />
+        </Field>
+      </div>
+      <Field
+        label={t("contact.field.company")}
+        error={errors.company?.message}
+        inputId="contact-company"
+      >
+        <Input
+          id="contact-company"
+          autoComplete="organization"
+          aria-invalid={!!errors.company}
+          placeholder={t("contact.field.company")}
+          {...register("company")}
+        />
+      </Field>
+      <Field
+        label={t("contact.field.message")}
+        error={errors.message?.message}
+        inputId="contact-message"
+      >
+        <Textarea
+          id="contact-message"
+          rows={5}
+          aria-invalid={!!errors.message}
+          aria-describedby={errors.message ? "contact-message-err" : undefined}
+          placeholder={t("contact.field.placeholder")}
+          {...register("message")}
+        />
+      </Field>
+      <button
+        type="submit"
+        disabled={isSubmitting || sent}
+        className={cn(
+          "btn-press group bg-primary text-primary-foreground glow-green focus-visible:ring-primary/70 focus-visible:ring-offset-background inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-3.5 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-70 disabled:hover:translate-y-0 sm:w-auto",
+        )}
+      >
+        {sent ? (
+          t("contact.sent")
+        ) : isSubmitting ? (
+          t("contact.sending")
+        ) : (
+          <>
+            {t("contact.send")}
+            <span aria-hidden className="btn-arrow">
+              →
+            </span>
+          </>
+        )}
+      </button>
+    </form>
   );
 }
 
@@ -318,5 +392,41 @@ function Field({
         </p>
       ) : null}
     </div>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
   );
 }

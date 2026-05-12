@@ -138,7 +138,13 @@ export function Products() {
                     ) : null}
                   </div>
 
-                  <div className="relative min-h-[420px] overflow-hidden py-10 sm:min-h-[460px] sm:py-12 lg:min-h-[420px] lg:py-0">
+                  <div
+                    className={cn(
+                      "relative overflow-hidden",
+                      "py-6 sm:min-h-[420px] sm:py-10 lg:min-h-[420px] lg:py-0",
+                      p.illustration === "directory" ? "min-h-[420px]" : "min-h-[360px]",
+                    )}
+                  >
                     <div
                       aria-hidden
                       className="absolute inset-0"
@@ -147,7 +153,7 @@ export function Products() {
                           "radial-gradient(ellipse 70% 80% at 50% 60%, oklch(0.88 0.27 145 / 0.15), transparent 65%)",
                       }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center p-8">
+                    <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-8">
                       <Illustration kind={p.illustration} />
                     </div>
                   </div>

@@ -35,7 +35,7 @@ export function Impact() {
   );
 
   return (
-    <section id="impact" ref={ref} className="relative py-20 sm:py-24 lg:py-32">
+    <section id="impact" ref={ref} className="relative pt-5 pb-20 sm:py-24 lg:py-32">
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="glass relative overflow-hidden rounded-[2.5rem] p-10 lg:p-16">
           <div
