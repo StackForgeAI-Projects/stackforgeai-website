@@ -7,10 +7,18 @@ import { Services } from "@/components/sections/services";
 import { Impact } from "@/components/sections/impact";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Contact } from "@/components/sections/contact";
+import { buildHomeMetadata } from "@/lib/seo";
+import { homeStructuredDataGraph } from "@/lib/schema";
+
+export const metadata = buildHomeMetadata();
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredDataGraph()) }}
+      />
       <Nav />
       <main id="main" className="bg-background text-foreground min-h-screen antialiased">
         <Hero />

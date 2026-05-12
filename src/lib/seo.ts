@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
 import { absoluteUrl } from "@/lib/utils";
 
+/** Public Search Console verification token (also safe to override via env). */
+export const GOOGLE_SITE_VERIFICATION =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "1rCIS0Rb2RMxaG4jp0pH8r6lPo2IkA3hrqQEiNrc8-k";
+
 interface SeoOptions {
+  /** When true, `title` is used as the full document title (no `· StackForgeAI` suffix). */
+  absoluteTitle?: boolean;
   title?: string;
   description?: string;
   path?: string;
@@ -11,7 +17,12 @@ interface SeoOptions {
 }
 
 export function buildMetadata(opts: SeoOptions = {}): Metadata {
-  const title = opts.title ? `${opts.title} · ${siteConfig.name}` : siteConfig.fullName;
+  const title =
+    opts.absoluteTitle && opts.title
+      ? opts.title
+      : opts.title
+        ? `${opts.title} · ${siteConfig.name}`
+        : siteConfig.fullName;
   const description = opts.description ?? siteConfig.description;
   const url = absoluteUrl(opts.path ?? "/");
   const ogImage = opts.image ?? siteConfig.ogImage;
@@ -28,10 +39,23 @@ export function buildMetadata(opts: SeoOptions = {}): Metadata {
     referrer: "origin-when-cross-origin",
     robots: opts.noIndex
       ? { index: false, follow: false }
-      : { index: true, follow: true, googleBot: { index: true, follow: true } },
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
+    verification: {
+      google: GOOGLE_SITE_VERIFICATION,
+    },
     alternates: {
       canonical: url,
-      languages: { en: url, rw: url },
+      languages: { en: url, "rw-RW": url },
     },
     openGraph: {
       title,
@@ -47,6 +71,7 @@ export function buildMetadata(opts: SeoOptions = {}): Metadata {
         },
       ],
       locale: "en_US",
+      alternateLocale: ["rw_RW"],
       type: "website",
     },
     twitter: {
@@ -54,7 +79,6 @@ export function buildMetadata(opts: SeoOptions = {}): Metadata {
       title,
       description,
       images: [ogImage],
-      creator: "@stackforgeai",
     },
     icons: {
       icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
@@ -64,40 +88,12 @@ export function buildMetadata(opts: SeoOptions = {}): Metadata {
   };
 }
 
-export function organizationJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteConfig.name,
-    legalName: "StackForgeAI Ltd.",
-    url: siteConfig.url,
-    logo: absoluteUrl("/logo.png"),
-    description: siteConfig.description,
-    foundingDate: "2025",
-    foundingLocation: { "@type": "Place", name: "Kigali, Rwanda" },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Kigali",
-      addressCountry: "RW",
-    },
-    contactPoint: {
-      "@type": "ContactPoint",
-      email: siteConfig.contact.email,
-      contactType: "customer support",
-      areaServed: ["RW", "AF"],
-      availableLanguage: ["en", "rw"],
-    },
-    sameAs: [siteConfig.links.github],
-  } as const;
-}
-
-export function websiteJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteConfig.name,
-    url: siteConfig.url,
-    inLanguage: ["en", "rw"],
-    publisher: { "@type": "Organization", name: siteConfig.name },
-  } as const;
+/** Homepage metadata: Rwanda/Kigali–focused title & description, canonical `/`. */
+export function buildHomeMetadata(): Metadata {
+  return buildMetadata({
+    absoluteTitle: true,
+    title: siteConfig.seo.home.title,
+    description: siteConfig.seo.home.description,
+    path: "/",
+  });
 }

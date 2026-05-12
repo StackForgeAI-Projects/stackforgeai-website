@@ -4,7 +4,8 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@/components/providers";
-import { buildMetadata, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { buildMetadata } from "@/lib/seo";
+import { rootStructuredDataGraph } from "@/lib/schema";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,11 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(rootStructuredDataGraph()) }}
         />
       </head>
       <body className="bg-background text-foreground min-h-screen font-sans antialiased">
