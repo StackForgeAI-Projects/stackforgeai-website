@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Check, Globe, Menu } from "lucide-react";
 import { siteConfig } from "@/lib/site";
@@ -59,7 +60,12 @@ export function Nav() {
               : undefined
           }
         >
-          <a href="#top" className="group flex items-center" aria-label={`${siteConfig.name} home`}>
+          <Link
+            href="/"
+            scroll
+            className="group flex items-center"
+            aria-label={`${siteConfig.name} home`}
+          >
             <Image
               src="/logo.png"
               alt="StackForgeAI"
@@ -69,7 +75,7 @@ export function Nav() {
               className="h-5 w-auto object-contain transition-transform duration-300 select-none group-hover:scale-[1.04] md:h-6"
               draggable={false}
             />
-          </a>
+          </Link>
 
           <nav
             className={cn(

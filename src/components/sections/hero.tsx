@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
+import { openContactTab } from "@/lib/contact-events";
 
 const TICKER_ITEMS = [
   "AI Systems",
@@ -153,6 +154,10 @@ export function Hero() {
           </a>
           <a
             href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              openContactTab("talk");
+            }}
             className="btn-press btn-ghost-hover border-border bg-surface/50 text-foreground focus-visible:ring-primary/70 focus-visible:ring-offset-background inline-flex items-center gap-2 rounded-full border px-7 py-3.5 font-medium backdrop-blur focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           >
             {t("hero.cta.contact")}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGSAP } from "@gsap/react";
@@ -10,6 +10,7 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
 import { contactSchema, type ContactInput } from "@/lib/contact-schema";
+import { CONTACT_TAB_EVENT, type ContactTab, type ContactTabEvent } from "@/lib/contact-events";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +24,18 @@ const CAL_LINK = "stackforgeai/15min";
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
   const { t } = useLang();
+  const [tab, setTab] = useState<ContactTab>("talk");
+
+  const showTalkTab = useCallback(() => setTab("talk"), []);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as ContactTabEvent).detail;
+      if (detail === "talk" || detail === "message") setTab(detail);
+    };
+    window.addEventListener(CONTACT_TAB_EVENT, handler);
+    return () => window.removeEventListener(CONTACT_TAB_EVENT, handler);
+  }, []);
 
   useGSAP(
     () => {
@@ -91,14 +104,13 @@ export function Contact() {
           </p>
           <p data-contact className="text-muted-foreground mt-4 text-base leading-relaxed">
             {t("contact.p2.1")}{" "}
-            <a
-              href={siteConfig.links.calendly}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary font-medium underline-offset-4 hover:underline focus:outline-none focus-visible:underline"
+            <button
+              type="button"
+              onClick={showTalkTab}
+              className="text-primary cursor-pointer font-medium underline-offset-4 transition hover:underline focus:outline-none focus-visible:underline"
             >
               {t("contact.p2.cta")}
-            </a>{" "}
+            </button>{" "}
             {t("contact.p2.2")}
           </p>
           <div data-contact className="mt-10 space-y-4 text-sm">
@@ -166,7 +178,11 @@ export function Contact() {
         </div>
 
         <div data-contact className="lg:col-span-7">
-          <Tabs defaultValue="talk" className="w-full">
+          <Tabs
+            value={tab}
+            onValueChange={(value) => setTab(value as ContactTab)}
+            className="w-full"
+          >
             <TabsList aria-label="Contact options">
               <TabsTrigger value="talk">
                 <CalendarIcon />
@@ -199,10 +215,55 @@ function CalEmbed({ fallbackLabel }: { fallbackLabel: string }) {
       try {
         const cal = await getCalApi({ namespace: CAL_NAMESPACE });
         if (cancelled) return;
+
+        // Mirror our oklch design tokens onto Cal's CSS variables so the
+        // booker visually inherits the StackForgeAI surface, border and
+        // typography instead of Cal's default cool-grey palette.
+        const darkVars = {
+          "cal-brand": "#39ff24",
+          "cal-brand-emphasis": "#7dff6b",
+          "cal-brand-text": "#040e17",
+          "cal-brand-accent": "#39ff24",
+          "cal-bg": "oklch(0.22 0.028 240)",
+          "cal-bg-emphasis": "oklch(0.30 0.03 240)",
+          "cal-bg-muted": "oklch(0.20 0.025 240)",
+          "cal-bg-subtle": "oklch(0.26 0.03 240)",
+          "cal-bg-info": "oklch(0.22 0.028 240)",
+          "cal-bg-success": "oklch(0.30 0.10 150)",
+          "cal-bg-attention": "oklch(0.30 0.10 80)",
+          "cal-bg-error": "oklch(0.30 0.15 30)",
+          "cal-bg-inverted": "oklch(0.97 0.01 200)",
+          "cal-bg-primary": "oklch(0.22 0.028 240)",
+          "cal-bg-secondary": "oklch(0.26 0.03 240)",
+          "cal-bg-tertiary": "oklch(0.30 0.03 240)",
+          "cal-border": "oklch(0.32 0.03 240)",
+          "cal-border-default": "oklch(0.32 0.03 240)",
+          "cal-border-emphasis": "oklch(0.42 0.03 240)",
+          "cal-border-subtle": "oklch(0.28 0.028 240)",
+          "cal-border-muted": "oklch(0.26 0.028 240)",
+          "cal-border-booker": "oklch(0.32 0.03 240)",
+          "cal-border-booker-emphasis": "oklch(0.42 0.03 240)",
+          "cal-border-focus": "#39ff24",
+          "cal-text": "oklch(0.97 0.01 200)",
+          "cal-text-emphasis": "oklch(0.99 0.005 200)",
+          "cal-text-default": "oklch(0.97 0.01 200)",
+          "cal-text-muted": "oklch(0.72 0.02 220)",
+          "cal-text-subtle": "oklch(0.60 0.02 220)",
+          "cal-text-brand": "#39ff24",
+          "cal-text-inverted": "oklch(0.18 0.025 240)",
+          // Best-effort font overrides. Cal.com does not officially expose
+          // these as themable variables; when supported they swap Cal Sans
+          // for our design-system fonts, otherwise they are silently
+          // ignored.
+          "cal-font-cal": "var(--font-display)",
+          "cal-font-sans": "var(--font-sans)",
+        } as const;
+
         cal("ui", {
+          theme: "dark",
           cssVarsPerTheme: {
-            light: { "cal-brand": "#040e17" },
-            dark: { "cal-brand": "#39ff24" },
+            light: darkVars,
+            dark: darkVars,
           },
           hideEventTypeDetails: false,
           layout: "month_view",
@@ -218,21 +279,27 @@ function CalEmbed({ fallbackLabel }: { fallbackLabel: string }) {
 
   return (
     <div
-      className="relative min-h-[640px] w-full overflow-hidden rounded-2xl sm:min-h-[720px]"
+      className="relative h-[520px] w-full overflow-auto rounded-2xl sm:h-[560px]"
       role="region"
       aria-label="Booking calendar"
     >
       <div
         aria-hidden
-        className="text-muted-foreground absolute inset-0 flex items-center justify-center text-sm"
+        className="text-muted-foreground pointer-events-none absolute inset-0 flex items-center justify-center text-sm"
       >
         {fallbackLabel}
       </div>
       <Cal
         namespace={CAL_NAMESPACE}
         calLink={CAL_LINK}
-        style={{ width: "100%", height: "100%", overflow: "auto", position: "relative", zIndex: 1 }}
-        config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true" }}
+        style={{
+          width: "100%",
+          minHeight: "100%",
+          overflow: "auto",
+          position: "relative",
+          zIndex: 1,
+        }}
+        config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true", theme: "dark" }}
       />
     </div>
   );
