@@ -158,9 +158,11 @@ const rw: Dict = {
 
   // Hero
   "hero.badge": "Twubaka Ikoranabuhanga rya AI muri Afurika · Kigali, U Rwanda",
+  // Hero title is rendered as: [1] [2 green] [3] — must read naturally in that order.
+  // Mirrors EN: "Building solutions that **power** Africa's digital growth."
   "hero.title.1": "Twubaka Ibisubizo",
-  "hero.title.2": "Bikomeza",
-  "hero.title.3": "Iterambere ry'Ikoranabuhanga rya Afurika",
+  "hero.title.2": "Biteza imbere ku",
+  "hero.title.3": "Iterambere ry'ikoranabuhanga rya Afurika",
   "hero.subtitle":
     "StackForgeAI yubaka sisitemu zikoresha AI, ibikorwa remezo by'ikoranabuhanga ku butegetsi, kaminuza, n'ubucuruzi, kuva mu Rwanda kugera muri Afurika yose.",
   "hero.cta.products": "Reba ibicuruzwa byacu",
