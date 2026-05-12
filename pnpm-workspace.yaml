@@ -1,5 +1,10 @@
 allowBuilds:
-  "@sentry/cli": set this to true or false
-  esbuild: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  "@sentry/cli": true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+onlyBuiltDependencies:
+  - "@sentry/cli"
+  - esbuild
+  - sharp
+  - unrs-resolver
