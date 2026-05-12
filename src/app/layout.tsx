@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@/components/providers";
+import { GoogleAnalyticsTag } from "@/components/google-analytics";
 import { buildMetadata } from "@/lib/seo";
 import { rootStructuredDataGraph } from "@/lib/schema";
 
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-background text-foreground min-h-screen font-sans antialiased">
+        <GoogleAnalyticsTag />
         <a href="#main" className="skip-link">
           Skip to main content
         </a>

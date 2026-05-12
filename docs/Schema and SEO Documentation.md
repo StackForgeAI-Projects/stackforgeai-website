@@ -24,6 +24,7 @@ This document describes how structured data (Schema.org JSON-LD), meta tags, and
 | Legal/static pages meta | `src/app/privacy/page.tsx`, `src/app/terms/page.tsx`, … |
 | Sitemap | `src/app/sitemap.ts` |
 | Robots | `src/app/robots.ts` |
+| GA4 (`gtag.js`) | `src/components/google-analytics.tsx`, CSP in `next.config.ts` |
 
 ---
 
@@ -102,7 +103,24 @@ When updating copy, prefer natural language; adjust `siteConfig.seo.home` and `k
 
 ---
 
-## 8. Safe change guidelines
+## 8. Google Analytics 4 (Google tag / `gtag.js`)
+
+This is **not** [Google Tag Manager](https://tagmanager.google.com/) (a separate container product). Google’s installer loads **`https://www.googletagmanager.com/gtag/js?id=G-…`** — that URL is normal for **GA4**.
+
+| Item | Location |
+|------|-----------|
+| GA4 snippet | `src/components/google-analytics.tsx` (`GoogleAnalyticsTag`) |
+| Wired globally | `src/app/layout.tsx` (fires on every route) |
+| Measurement ID | `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env.example` / Vercel |
+| CSP allowlist | `next.config.ts` (`script-src`, `connect-src` for Google Analytics / Tag Manager hosts) |
+
+The ID must match `G-[A-Za-z0-9]+`. Leave unset or invalid on **preview** deployments if you do not want traffic mixed into the production GA4 property.
+
+**EEA users:** configure [Consent Mode](https://support.google.com/analytics/answer/9976101) if you run ads or need GDPR-aligned defaults.
+
+---
+
+## 9. Safe change guidelines
 
 - Do **not** invent `legalName`, founding dates, or awards unless verified—misleading structured data can violate Google spam policies.
 - When adding new product pages, prefer **dedicated URLs** later with their own `WebPage` + `Product`/`SoftwareApplication` schema instead of overloading the homepage graph.
@@ -110,7 +128,7 @@ When updating copy, prefer natural language; adjust `siteConfig.seo.home` and `k
 
 ---
 
-## 9. Related files
+## 10. Related files
 
 - `docs/DEPLOYMENT.md` — DNS, Vercel env, Resend, broader launch checklist.
 - `SECURITY.md` — headers and CSP (may affect third-party SEO tools; avoid weakening CSP for vanity pixels).
