@@ -24,19 +24,22 @@ const main: React.CSSProperties = {
   backgroundColor: "#0b1117",
   fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif',
   color: "#e6ecef",
+  // Outer gutters — webmail often ignores margins on inner wrappers; padding on
+  // Body keeps content away from the reading-pane edges (SiteGround + Gmail).
+  padding: "40px 28px",
 };
 
 const container: React.CSSProperties = {
   margin: "0 auto",
-  padding: "32px 24px",
-  maxWidth: 600,
+  padding: "8px 4px 0",
+  maxWidth: 560,
 };
 
 const card: React.CSSProperties = {
   backgroundColor: "#141a22",
   border: "1px solid #1f2832",
   borderRadius: 16,
-  padding: 28,
+  padding: "32px 28px",
 };
 
 const label: React.CSSProperties = {
@@ -64,14 +67,18 @@ const meta: React.CSSProperties = {
 export function ContactNotificationEmail({ name, email, company, message, ip, userAgent }: Props) {
   return (
     <Html>
-      <Head />
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="dark" />
+        <meta name="supported-color-schemes" content="dark" />
+      </Head>
       <Preview>New website enquiry from {name}</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={{ color: "#22c55e", fontSize: 22, margin: "0 0 8px" }}>
+          <Heading style={{ color: "#22c55e", fontSize: 22, margin: "0 0 12px", padding: "0 4px" }}>
             StackForgeAI · New enquiry
           </Heading>
-          <Text style={{ ...meta, marginBottom: 24 }}>
+          <Text style={{ ...meta, marginBottom: 28, padding: "0 4px", lineHeight: "22px" }}>
             A new contact form submission has arrived from stackforgeai.africa
           </Text>
 
@@ -102,7 +109,9 @@ export function ContactNotificationEmail({ name, email, company, message, ip, us
             style={{
               ...meta,
               textAlign: "center" as const,
-              marginTop: 24,
+              marginTop: 32,
+              padding: "0 8px 8px",
+              lineHeight: "20px",
             }}
           >
             © StackForgeAI · Kigali, Rwanda
