@@ -8,6 +8,7 @@ Thank you for contributing. Please follow the StackForgeAI Engineering SOP (`doc
 corepack enable pnpm
 git clone git@github.com:StackForgeAI-Projects/stackforgeai-website.git
 cd stackforgeai-website
+./scripts/setup-git-identity.sh   # StackForge author — required
 pnpm install
 cp .env.example .env.local
 pnpm dev
