@@ -1,9 +1,9 @@
-# StackForgeAI website code ownership.
-# At least one CODEOWNER review is required for every PR.
+# StackForgeAI website — all reviews go to the StackForge GitHub org account.
+# At least one CODEOWNER approval is required on every PR (branch protection).
 
-*                              @StackForgeAI-Projects/engineering
-/src/app/api/                  @StackForgeAI-Projects/engineering @StackForgeAI-Projects/security
-/middleware.ts                 @StackForgeAI-Projects/engineering @StackForgeAI-Projects/security
-/next.config.ts                @StackForgeAI-Projects/engineering @StackForgeAI-Projects/security
-/.github/workflows/            @StackForgeAI-Projects/engineering
-/docs/                         @StackForgeAI-Projects/engineering
+*                              @stackforgeai
+/src/app/api/                  @stackforgeai
+/middleware.ts                 @stackforgeai
+/next.config.ts                @stackforgeai
+/.github/workflows/            @stackforgeai
+/docs/                         @stackforgeai
