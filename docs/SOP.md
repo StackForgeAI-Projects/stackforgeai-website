@@ -70,7 +70,7 @@ git clone git@github.com:StackForgeAI-Projects/stackforgeai-website.git
 pnpm install
 cp .env.example .env.local
 pnpm prepare         # husky hooks
-pnpm dev
+pnpm dev             # frees :3000 then Next + Turbopack → http://localhost:3000
 pnpm test            # all green before any work begins
 ```
 
@@ -117,7 +117,7 @@ security(headers): tighten CSP frame-src for calendly
 
 ### SOP-06 Definition of Done
 
-See `README.md#definition-of-done-sop-5--sop-06`.
+See [`README.md`](../README.md#definition-of-done-sop-06) and [`docs/GIT_WORKFLOW.md`](./GIT_WORKFLOW.md).
 
 ---
 

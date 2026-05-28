@@ -7,7 +7,10 @@ import { z } from "zod";
 const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   RESEND_API_KEY: z.string().min(1).optional(),
-  CONTACT_FROM_EMAIL: z.string().min(1).default("StackForgeAI <hello@stackforgeai.africa>"),
+  CONTACT_FROM_EMAIL: z
+    .string()
+    .min(1)
+    .default("StackForgeAI Contact Form <contact@send.stackforgeai.africa>"),
   CONTACT_TO_EMAIL: z.string().email().default("hello@stackforgeai.africa"),
   BREVO_API_KEY: z.string().min(1).optional(),
   BREVO_LIST_ID: z.coerce.number().int().positive().default(1),

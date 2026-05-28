@@ -2,6 +2,12 @@ import "server-only";
 import { Resend } from "resend";
 import { serverEnv } from "@/lib/env";
 import { ContactNotificationEmail } from "@/emails/contact-notification";
+import {
+  buildContactPlainText,
+  contactFromToMisconfigured,
+  formatContactReplyTo,
+  type SendContactArgs,
+} from "@/lib/contact-email-content";
 
 let cached: Resend | undefined;
 
@@ -12,14 +18,7 @@ export function getResend(): Resend | null {
   return cached;
 }
 
-export interface SendContactArgs {
-  name: string;
-  email: string;
-  company?: string;
-  message: string;
-  ip?: string;
-  userAgent?: string;
-}
+export type { SendContactArgs };
 
 export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: string }> {
   const resend = getResend();
@@ -36,11 +35,22 @@ export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: st
     throw new Error("Email transport not configured");
   }
 
+  if (contactFromToMisconfigured(env.CONTACT_FROM_EMAIL, env.CONTACT_TO_EMAIL)) {
+    console.warn(
+      "[email] CONTACT_FROM_EMAIL and CONTACT_TO_EMAIL are the same address. " +
+        "Inbound mail often lands in junk when a mailbox receives mail that appears to be from itself via Resend. " +
+        "Use a dedicated sender on send.stackforgeai.africa — see docs/EMAIL_DELIVERABILITY.md.",
+    );
+  }
+
+  const safeName = args.name.trim() || "Website visitor";
+  const subject = `[Website Contact] Enquiry from ${safeName}`;
+
   const result = await resend.emails.send({
     from: env.CONTACT_FROM_EMAIL,
     to: env.CONTACT_TO_EMAIL,
-    replyTo: args.email,
-    subject: `New website enquiry from ${args.name}`,
+    replyTo: formatContactReplyTo(args.name, args.email),
+    subject,
     react: ContactNotificationEmail({
       name: args.name,
       email: args.email,
@@ -49,6 +59,12 @@ export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: st
       ip: args.ip,
       userAgent: args.userAgent,
     }),
+    text: buildContactPlainText(args),
+    tags: [{ name: "category", value: "contact-form" }],
+    headers: {
+      "X-Entity-Ref-ID": `contact-${Date.now()}`,
+      "Auto-Submitted": "auto-generated",
+    },
   });
 
   if (result.error) {

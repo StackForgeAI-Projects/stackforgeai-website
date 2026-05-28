@@ -4,13 +4,14 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, PRODUCT_SECTION_IDS } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type StatusVariant = "live" | "dev" | "soon";
 type IllustrationKind = "repair" | "education" | "directory";
 type Product = {
   name: string;
+  sectionId: (typeof PRODUCT_SECTION_IDS)[keyof typeof PRODUCT_SECTION_IDS];
   descKey: string;
   statusKey: string;
   statusVariant: StatusVariant;
@@ -22,6 +23,7 @@ type Product = {
 const products: Product[] = [
   {
     name: "StackFix",
+    sectionId: PRODUCT_SECTION_IDS.stackfix,
     descKey: "products.stackfix.desc",
     statusKey: "products.liveNow",
     statusVariant: "live",
@@ -31,6 +33,7 @@ const products: Product[] = [
   },
   {
     name: "StackEDU",
+    sectionId: PRODUCT_SECTION_IDS.stackedu,
     descKey: "products.stackedu.desc",
     statusKey: "products.inDev",
     statusVariant: "dev",
@@ -39,6 +42,7 @@ const products: Product[] = [
   },
   {
     name: "Rwanda Directory",
+    sectionId: PRODUCT_SECTION_IDS.directory,
     descKey: "products.directory.desc",
     statusKey: "products.comingSoon",
     statusVariant: "soon",
@@ -91,8 +95,9 @@ export function Products() {
             return (
               <article
                 key={p.name}
+                id={p.sectionId}
                 data-product
-                className="group border-border/60 hover:border-primary/40 relative overflow-hidden rounded-3xl border bg-[oklch(0.20_0.025_240)] transition-colors"
+                className="group border-border/60 hover:border-primary/40 relative scroll-mt-28 overflow-hidden rounded-3xl border bg-[oklch(0.20_0.025_240)] transition-colors lg:scroll-mt-32"
               >
                 <div
                   className={cn(
@@ -299,7 +304,7 @@ function Illustration({ kind }: { kind: IllustrationKind }) {
                   <Bar w="w-12" h="h-1.5" />
                   <span className="text-primary font-mono text-[9px]">A{i + 1}</span>
                 </div>
-                <div className="font-display text-primary text-lg">{score}%</div>
+                <div className="text-primary text-lg font-semibold">{score}%</div>
                 <div className="bg-border/60 h-1 overflow-hidden rounded-full">
                   <div
                     className="h-full bg-gradient-to-r from-[var(--green-bright)] to-[var(--green-deep)]"
@@ -371,7 +376,7 @@ function Illustration({ kind }: { kind: IllustrationKind }) {
             </div>
             <div className="flex-1 space-y-1.5">
               {b.highlight ? (
-                <div className="font-display text-foreground text-sm font-semibold">{b.name}</div>
+                <div className="text-foreground text-sm font-semibold">{b.name}</div>
               ) : (
                 <Bar w="w-28" h="h-2" />
               )}

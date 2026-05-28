@@ -79,13 +79,13 @@ export function Testimonials() {
               >
                 <path d="M7 7h4v4H7v4a4 4 0 004-4V7zm6 0h4v4h-4v4a4 4 0 004-4V7z" />
               </svg>
-              <blockquote className="text-foreground mt-6 text-lg leading-relaxed">
+              <blockquote className="text-foreground mt-6 text-base leading-relaxed">
                 &ldquo;{t(tm.quoteKey)}&rdquo;
               </blockquote>
               <figcaption className="mt-8 flex items-center gap-3">
                 <div
                   aria-hidden
-                  className="bg-primary/15 border-primary/30 font-display text-primary flex h-11 w-11 items-center justify-center rounded-full border font-semibold"
+                  className="bg-primary/15 border-primary/30 text-primary flex h-11 w-11 items-center justify-center rounded-full border font-semibold"
                 >
                   {tm.initials}
                 </div>

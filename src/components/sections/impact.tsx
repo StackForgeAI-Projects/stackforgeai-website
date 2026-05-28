@@ -63,11 +63,14 @@ export function Impact() {
               </h2>
               <p
                 data-impact
-                className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed"
+                className="text-muted-foreground mt-6 max-w-2xl text-base leading-relaxed"
               >
                 {t("impact.p1")}
               </p>
-              <p data-impact className="text-muted-foreground mt-4 max-w-2xl leading-relaxed">
+              <p
+                data-impact
+                className="text-muted-foreground mt-4 max-w-2xl text-base leading-relaxed"
+              >
                 {t("impact.p2")}
               </p>
               <a

@@ -18,3 +18,4 @@ Host on **Vercel** in the `fra1` + `cdg1` regions; DNS managed by **Cloudflare**
 
 - Two DNS providers in a real sense (Cloudflare zone → SiteGround mail) — mitigated by documenting the exact records in `docs/DEPLOYMENT.md`.
 - Vercel free tier has bandwidth limits — acceptable for a marketing site; upgrade path is one click.
+- Production deploys from **`main` only after PR merge** — direct pushes blocked via GitHub branch protection (`docs/GIT_WORKFLOW.md`).

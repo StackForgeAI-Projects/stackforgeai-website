@@ -5,7 +5,7 @@
 
 ## Decision
 
-Use **Resend** as the transactional email API and **React Email** for templates. Outbound `From` is `StackForgeAI <hello@stackforgeai.africa>`.
+Use **Resend** as the transactional email API and **React Email** for templates. Outbound `From` is `StackForgeAI Contact Form <contact@send.stackforgeai.africa>`; `Reply-To` is the visitor. Inbox is `hello@stackforgeai.africa`.
 
 ## Why
 

@@ -41,7 +41,7 @@ export default function HomePage() {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               backgroundSize: "contain",
-              opacity: 0.13,
+              opacity: 0.06,
               transform: "translate(-50%, -50%) rotate(-12deg)",
               maskImage: "radial-gradient(ellipse 75% 100% at 50% 50%, black 70%, transparent 98%)",
               WebkitMaskImage:

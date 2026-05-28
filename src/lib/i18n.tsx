@@ -75,7 +75,7 @@ const en: Dict = {
     "We provide continuous support, updates, and improvements to ensure your systems remain reliable and efficient.",
 
   // Impact
-  "impact.kicker": "// community impact",
+  "impact.kicker": "// StackForgeNext",
   "impact.title.1": "Building",
   "impact.title.2": "great software",
   "impact.title.3": "starts with building great people.",
@@ -129,7 +129,11 @@ const en: Dict = {
   "footer.tagline":
     "Building intelligent systems that strengthen institutions and power Africa's digital future.",
   "footer.location": "Kigali, Rwanda 🇷🇼",
-  "footer.navigate": "Navigate",
+  "footer.company": "Company",
+  "footer.products": "Products",
+  "footer.product.stackfix": "StackFix",
+  "footer.product.stackedu": "StackEdu",
+  "footer.product.directory": "Rwanda Directory",
   "footer.newsletter": "Newsletter",
   "footer.newsletter.desc":
     "Be the first to receive updates about our products, services and job vacancies.",
@@ -215,7 +219,7 @@ const rw: Dict = {
     "Dutanga ubufasha buhoraho, ivugurura, n'iterambere kugira ngo sisitemu zanyu zikomeze kuba zifite icyizere kandi zikora neza.",
 
   // Impact
-  "impact.kicker": "// ingaruka mu muryango",
+  "impact.kicker": "// StackForgeNext",
   "impact.title.1": "Kubaka",
   "impact.title.2": "porogaramu nziza",
   "impact.title.3": "bitangirira ku kubaka abantu beza.",
@@ -271,7 +275,11 @@ const rw: Dict = {
   "footer.tagline":
     "Twubaka sisitemu zihebuje zikomeza inzego kandi zigatera imbere ejo hazaza h'ikoranabuhanga muri Afurika.",
   "footer.location": "Kigali, U Rwanda 🇷🇼",
-  "footer.navigate": "Genda",
+  "footer.company": "Isosiyete",
+  "footer.products": "Ibicuruzwa",
+  "footer.product.stackfix": "StackFix",
+  "footer.product.stackedu": "StackEdu",
+  "footer.product.directory": "Urutonde rwa Rwanda",
   "footer.newsletter": "Amakuru",
   "footer.newsletter.desc":
     "Ba uwa mbere kubona amakuru ku bicuruzwa byacu, serivisi n'imyanya y'akazi.",

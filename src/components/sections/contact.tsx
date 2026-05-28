@@ -55,7 +55,7 @@ export function Contact() {
 
   return (
     <section id="contact" ref={ref} className="relative overflow-hidden py-20 sm:py-24 lg:py-32">
-      <SfWatermark rotate={14} opacity={0.05} size="min(900px, 75vw)" />
+      <SfWatermark rotate={14} opacity={0.04} size="min(900px, 75vw)" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.18]"
@@ -99,7 +99,7 @@ export function Contact() {
             <span className="text-gradient-green">{t("contact.title.2")}</span>{" "}
             {t("contact.title.3")}
           </h2>
-          <p data-contact className="text-muted-foreground mt-6 text-lg leading-relaxed">
+          <p data-contact className="text-muted-foreground mt-6 text-base leading-relaxed">
             {t("contact.p1")}
           </p>
           <p data-contact className="text-muted-foreground mt-4 text-base leading-relaxed">
@@ -255,7 +255,7 @@ function CalEmbed({ fallbackLabel }: { fallbackLabel: string }) {
           // these as themable variables; when supported they swap Cal Sans
           // for our design-system fonts, otherwise they are silently
           // ignored.
-          "cal-font-cal": "var(--font-display)",
+          "cal-font-cal": "var(--font-sans)",
           "cal-font-sans": "var(--font-sans)",
         } as const;
 

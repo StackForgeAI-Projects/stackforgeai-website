@@ -72,7 +72,7 @@ export function ContactNotificationEmail({ name, email, company, message, ip, us
         <meta name="color-scheme" content="dark" />
         <meta name="supported-color-schemes" content="dark" />
       </Head>
-      <Preview>New website enquiry from {name}</Preview>
+      <Preview>[Website Contact] Enquiry from {name}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={{ color: "#22c55e", fontSize: 22, margin: "0 0 12px", padding: "0 4px" }}>

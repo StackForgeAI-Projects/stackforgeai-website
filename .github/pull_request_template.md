@@ -12,10 +12,18 @@
 
 - [ ] Manual: …
 - [ ] Automated: `pnpm test:unit` / `pnpm test:e2e`
+- [ ] **Vercel Preview:** open the preview URL from the Vercel bot comment on this PR and smoke-test the affected pages
 
 ## Screenshots / recordings (for UI changes)
 
 <!-- before / after -->
+
+## Release path
+
+> **Do not push directly to `main`.** After this PR is approved and merged, production deploys from `main` automatically (see [`docs/GIT_WORKFLOW.md`](../docs/GIT_WORKFLOW.md)).
+
+- [ ] Target branch is correct (`develop` for features, `main` only for hotfixes / release promotion)
+- [ ] Reviewer has checked the Vercel preview (not just the diff)
 
 ## Checklist (SOP-06 · Definition of Done)
 

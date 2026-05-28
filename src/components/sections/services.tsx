@@ -106,7 +106,7 @@ export function Services() {
             {t("services.title.1")}{" "}
             <span className="text-gradient-green">{t("services.title.2")}</span>.
           </h2>
-          <p className="text-muted-foreground mt-6">{t("services.intro")}</p>
+          <p className="text-muted-foreground mt-6 text-base">{t("services.intro")}</p>
         </div>
         <div className="space-y-5 lg:col-span-8">
           {serviceMeta.map((s) => (
@@ -158,7 +158,9 @@ export function Services() {
                     {s.n}
                   </span>
                 </div>
-                <p className="text-muted-foreground mt-3 leading-relaxed">{t(s.descKey)}</p>
+                <p className="text-muted-foreground mt-3 text-base leading-relaxed">
+                  {t(s.descKey)}
+                </p>
               </div>
             </div>
           ))}

@@ -137,7 +137,7 @@ export function Hero() {
 
         <p
           data-hero-anim
-          className="text-muted-foreground mx-auto mt-8 max-w-2xl text-base leading-relaxed sm:text-lg"
+          className="text-muted-foreground mx-auto mt-8 max-w-2xl text-base leading-relaxed"
         >
           {t("hero.subtitle")}
         </p>
@@ -175,7 +175,7 @@ export function Hero() {
             className="glass gpu absolute top-4 left-0 w-56 rounded-2xl p-4 text-left"
           >
             <div className="text-muted-foreground text-xs">{t("hero.card.mission")}</div>
-            <div className="font-display mt-1 text-lg leading-tight font-semibold">
+            <div className="mt-1 text-lg leading-tight font-semibold">
               {t("hero.card.builtFor")}
             </div>
             <div className="mt-3 flex h-8 items-end gap-1">
@@ -245,7 +245,7 @@ export function Hero() {
               aria-hidden={k === 1}
             >
               {TICKER_ITEMS.map((item) => (
-                <span key={item} className="font-display flex items-center gap-12 text-xl">
+                <span key={item} className="flex items-center gap-12 text-xl">
                   {item}
                   <span className="bg-primary h-1.5 w-1.5 rounded-full" />
                 </span>

@@ -13,20 +13,23 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-## Workflow
+## Workflow (Pull Requests — not direct pushes to main)
+
+Read **[`docs/GIT_WORKFLOW.md`](docs/GIT_WORKFLOW.md)** first.
 
 1. Branch from `develop`: `git switch -c feature/<slug>` (or `fix/<slug>`)
-2. Write code following the [Definition of Done](./README.md#definition-of-done-sop-5--sop-06)
+2. Write code following the [Definition of Done](./README.md#definition-of-done-sop-06)
 3. Commit using **Conventional Commits** (commitlint enforces this):
    - `feat(hero): add GSAP text reveal`
    - `fix(contact): validate empty company field`
    - `chore(deps): bump gsap to 3.14`
    - `security(headers): tighten CSP for calendly frame`
-4. Push and open a PR against `develop` (or `main` for hotfixes)
+4. Push and open a **Pull Request** against `develop` (or `main` for hotfixes only)
 5. PR title also follows Conventional Commits
-6. Fill in the PR template completely
+6. Fill in the PR template completely — include the **Vercel Preview** smoke test
 7. Wait for: green CI · ≥1 review · CODEOWNERS approval if relevant
 8. **Squash & merge**, then delete the branch
+9. Merges to `main` deploy production on Vercel automatically (after branch protection is enabled, only merges reach `main`)
 
 ## Code style
 
@@ -41,7 +44,7 @@ pnpm dev
 
 - Animate **only** `transform` / `opacity` — never `width` / `height` / `top` / `left`
 - Always use `useGSAP({ scope })` — no bare `useEffect` for GSAP
-- Check `prefersReducedMotion()` and bail out of decorative loops
+- Check `prefersReducedMotion()` from `@/lib/gsap` and bail out of decorative loops
 - Use `data-*` selectors inside the scoped ref, never global IDs
 - Apply `gpu` utility class to elements that animate continuously
 

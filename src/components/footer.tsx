@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useLang } from "@/lib/i18n";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, PRODUCT_SECTION_IDS } from "@/lib/site";
 import { newsletterSchema } from "@/lib/contact-schema";
 
 export function Footer() {
@@ -15,7 +15,24 @@ export function Footer() {
   const [submitting, setSubmitting] = useState(false);
   const { t } = useLang();
 
-  const sections = siteConfig.nav.map((s) => ({ href: s.href, label: t(s.labelKey) }));
+  const companySections = siteConfig.nav
+    .filter((s) => s.href !== "#products")
+    .map((s) => ({ href: s.href, label: t(s.labelKey) }));
+
+  const productLinks = [
+    {
+      href: `/#${PRODUCT_SECTION_IDS.stackfix}`,
+      labelKey: "footer.product.stackfix" as const,
+    },
+    {
+      href: `/#${PRODUCT_SECTION_IDS.stackedu}`,
+      labelKey: "footer.product.stackedu" as const,
+    },
+    {
+      href: `/#${PRODUCT_SECTION_IDS.directory}`,
+      labelKey: "footer.product.directory" as const,
+    },
+  ];
 
   const onSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,7 +76,7 @@ export function Footer() {
         }}
       />
       <div className="relative mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-12">
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-3">
           <Link
             href="#top"
             aria-label={`${siteConfig.name} home`}
@@ -74,18 +91,18 @@ export function Footer() {
               draggable={false}
             />
           </Link>
-          <p className="text-muted-foreground mt-5 max-w-sm text-sm leading-relaxed">
+          <p className="text-muted-foreground mt-5 max-w-sm text-base leading-relaxed">
             {t("footer.tagline")}
           </p>
-          <p className="text-muted-foreground mt-4 text-sm">{t("footer.location")}</p>
+          <p className="text-muted-foreground mt-4 text-base">{t("footer.location")}</p>
         </div>
 
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-2">
           <div className="text-primary font-mono text-xs tracking-widest uppercase">
-            {t("footer.navigate")}
+            {t("footer.company")}
           </div>
           <ul className="mt-5 space-y-3">
-            {sections.map((s) => (
+            {companySections.map((s) => (
               <li key={s.href}>
                 <a
                   href={s.href}
@@ -98,11 +115,29 @@ export function Footer() {
           </ul>
         </div>
 
+        <div className="lg:col-span-2">
+          <div className="text-primary font-mono text-xs tracking-widest uppercase">
+            {t("footer.products")}
+          </div>
+          <ul className="mt-5 space-y-3">
+            {productLinks.map((p) => (
+              <li key={p.href}>
+                <Link
+                  href={p.href}
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
+                  {t(p.labelKey)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="lg:col-span-5">
           <div className="text-primary font-mono text-xs tracking-widest uppercase">
             {t("footer.newsletter")}
           </div>
-          <p className="text-muted-foreground mt-5 text-sm leading-relaxed">
+          <p className="text-muted-foreground mt-5 text-base leading-relaxed">
             {t("footer.newsletter.desc")}
           </p>
           <form onSubmit={onSubscribe} className="mt-5 flex flex-col gap-3 sm:flex-row">

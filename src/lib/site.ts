@@ -78,4 +78,13 @@ export const siteConfig = {
   ogImage: "/og-image.png",
 } as const;
 
+/**
+ * DOM ids on homepage product cards (`#products` section). Footer uses `/#…` so anchors work from any route.
+ */
+export const PRODUCT_SECTION_IDS = {
+  stackfix: "product-stackfix",
+  stackedu: "product-stackedu",
+  directory: "product-rwanda-directory",
+} as const;
+
 export type SiteConfig = typeof siteConfig;

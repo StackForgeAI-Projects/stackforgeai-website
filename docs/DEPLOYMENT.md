@@ -37,9 +37,10 @@ git push -u origin develop
 In GitHub → Settings → Branches:
 
 - Protect `main`: require PR, require 1 approving review, require status checks
-  (`quality`, `build`), include administrators.
-- Protect `develop`: require PR, require status checks (`quality`, `build`).
-- Settings → Code security → enable **Dependabot alerts**, **Dependabot security updates**, and **CodeQL** (already wired by `.github/workflows/codeql.yml`).
+  (`Lint · Typecheck · Test`, `Build`), include administrators.
+- Protect `develop`: same rules.
+- Or run `./scripts/configure-branch-protection.sh` (requires `gh` CLI + admin access).
+- Settings → Code security → enable **Dependabot alerts**, **Dependabot security updates**, and **CodeQL** (`.github/workflows/codeql.yml`).
 
 ---
 
@@ -109,13 +110,11 @@ In Cloudflare DNS for `stackforgeai.africa`, create the following. **Proxy statu
 | ----- | -------------- | -------------------------------------------------------- | ----- | ---- | ------------------------------------ |
 | A     | `@`            | `76.76.21.21`                                            | 🟧    | Auto | Vercel anycast IP                    |
 | CNAME | `www`          | `cname.vercel-dns.com`                                   | 🟧    | Auto | Vercel-managed CNAME                 |
-| MX    | `@`            | `mailservice.siteground.biz` (priority 10)               | ⬜    | Auto | Get exact host from SiteGround panel |
-| TXT   | `@`            | `v=spf1 include:_spf.siteground.biz include:resend.com ~all` | ⬜    | Auto | Combined SPF (SiteGround + Resend) |
-| TXT   | `_dmarc`       | `v=DMARC1; p=quarantine; rua=mailto:postmaster@stackforgeai.africa; pct=100; adkim=s; aspf=s` | ⬜ | Auto | DMARC policy |
-| CNAME | `s1._domainkey`| `s1.domainkey.siteground.biz`                            | ⬜    | Auto | SiteGround DKIM (verify in SG panel) |
-| CNAME | `s2._domainkey`| `s2.domainkey.siteground.biz`                            | ⬜    | Auto | SiteGround DKIM #2                   |
-| TXT   | `resend._domainkey` | `<value from Resend dashboard>`                     | ⬜    | Auto | Resend DKIM                          |
-| CNAME | `send`         | `feedback-smtp.eu-west-1.amazonses.com`                  | ⬜    | Auto | Resend bounce/feedback (if used)     |
+| MX    | `@`            | `mx10.antispam.mailspamprotection.com` (prio 10) + `mx20` / `mx30` | ⬜    | Auto | SiteGround antispam — confirm in Site Tools |
+| TXT   | `@`            | `v=spf1 include:stackforgeai.africa.spf.auto.dnssmarthost.net include:resend.com ~all` | ⬜    | Auto | SiteGround + Resend (single SPF TXT) |
+| TXT   | `send`         | `v=spf1 include:amazonses.com ~all`                      | ⬜    | Auto | Resend sending subdomain |
+| TXT   | `_dmarc`       | `v=DMARC1; p=quarantine; rua=mailto:postmaster@stackforgeai.africa; pct=100; adkim=s; aspf=s` | ⬜ | Auto | See `docs/EMAIL_DELIVERABILITY.md` |
+| TXT   | `resend._domainkey` | `<value from Resend dashboard>`                     | ⬜    | Auto | Resend DKIM (apex) |
 
 > ℹ️ **Exact SiteGround MX hostname** depends on your SiteGround plan/region. In SiteGround → Site Tools → Email → Accounts → External Configuration, copy the displayed MX/SPF/DKIM values and replace the placeholders above.
 
@@ -163,7 +162,11 @@ Send a test email to <check-auth@verifier.port25.com> from `hello@stackforgeai.a
 
 ### 5.2 Verify Resend domain
 
-Resend → Domains → `stackforgeai.africa` → click **Verify**. Once green, Resend will accept `From: StackForgeAI <hello@stackforgeai.africa>`.
+Resend → Domains → `stackforgeai.africa` → click **Verify**. Once green, Resend accepts `From: …@send.stackforgeai.africa` (see `docs/EMAIL_DELIVERABILITY.md` — **do not** use the same address for From and To).
+
+### 5.3 Contact form inbox placement
+
+After DNS + env updates, submit the live form and confirm headers show SPF/DKIM pass. Full checklist: **`docs/EMAIL_DELIVERABILITY.md`**.
 
 ---
 
@@ -176,7 +179,7 @@ Vercel → Project → Settings → **Environment Variables**. Add **all of thes
 | `NEXT_PUBLIC_SITE_URL`               | `https://stackforgeai.africa`                    | `https://staging.stackforgeai.africa` |
 | `NEXT_PUBLIC_SITE_NAME`              | `StackForgeAI`                                | `StackForgeAI Preview`             |
 | `RESEND_API_KEY`                     | from Resend                                   | same                               |
-| `CONTACT_FROM_EMAIL`                 | `StackForgeAI <hello@stackforgeai.africa>`       | same                               |
+| `CONTACT_FROM_EMAIL`                 | `StackForgeAI Contact Form <contact@send.stackforgeai.africa>` | same (must differ from To)         |
 | `CONTACT_TO_EMAIL`                   | `hello@stackforgeai.africa`                      | dev inbox                          |
 | `BREVO_API_KEY`                      | from Brevo                                    | (optional)                         |
 | `BREVO_LIST_ID`                      | numeric ID                                    | same                               |
@@ -200,7 +203,7 @@ After adding/changing any variable, **Redeploy** the production deployment.
 - [ ] `pnpm build` succeeds locally with production env vars
 - [ ] Domain `stackforgeai.africa` → 200 status, valid TLS, redirect from `www`
 - [ ] Lighthouse mobile + desktop ≥ 90 / 95 / 95 / 90
-- [ ] Contact form: submit a real test, confirm it arrives at `hello@stackforgeai.africa`
+- [ ] Contact form: submit a real test, confirm it arrives **in inbox** at `hello@stackforgeai.africa` (SPF/DKIM pass — see `docs/EMAIL_DELIVERABILITY.md`)
 - [ ] Newsletter form: submit, confirm Brevo sends double-opt-in email
 - [ ] Rate limit verified (submit 6 contacts quickly → 6th returns 429)
 - [ ] `/sitemap.xml` and `/robots.txt` render and contain correct host

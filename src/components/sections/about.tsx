@@ -47,7 +47,7 @@ export function About() {
             {t("about.title.1")} <span className="text-gradient-green">{t("about.title.2")}</span>.
           </h2>
         </div>
-        <div className="text-muted-foreground space-y-6 text-lg leading-relaxed lg:col-span-7">
+        <div className="text-muted-foreground space-y-6 text-base leading-relaxed lg:col-span-7">
           <p data-about>{t("about.p1")}</p>
           <p data-about>{t("about.p2")}</p>
         </div>
