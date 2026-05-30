@@ -106,7 +106,7 @@ export const rw: SiteDict = {
   "contact.tab.message": "Ohereza ubutumwa",
   "contact.tab.cal.fallback": "Gupakira gahunda…",
   "contact.send": "Ohereza ubutumwa",
-  "contact.sent": "Ubutumwa bwoherejwe ✓",
+  "contact.sent": "Ubutumwa bwoherejwe ✓ Tuzakugarukira mu masaha 48.",
   "contact.sending": "Birimo koherezwa…",
   "contact.error": "Hari ikosa. Ongera ugerageze.",
   "contact.error.network": "Ikibazo cya murandasi. Reba umurongo wawe.",
