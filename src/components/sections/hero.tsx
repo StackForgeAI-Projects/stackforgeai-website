@@ -129,7 +129,7 @@ export function Hero() {
 
         <h1
           data-hero-anim
-          className="font-display mx-auto mt-8 max-w-[56rem] text-[72px] leading-[1.05] font-semibold tracking-tight"
+          className="font-display mx-auto mt-8 max-w-[56rem] text-5xl leading-[1.05] font-semibold tracking-tight md:text-7xl"
         >
           {t("hero.title.1")}
           <br />

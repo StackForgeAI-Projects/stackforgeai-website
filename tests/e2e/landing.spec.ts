@@ -2,14 +2,15 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test.describe("Landing page", () => {
-  test("renders hero headline at 72px in three lines", async ({ page }) => {
+  test("renders hero headline sizing and three-line layout", async ({ page, viewport }) => {
     await page.goto("/");
     const h1 = page.getByRole("heading", { level: 1 });
     await expect(h1).toContainText("Building Solutions That");
     await expect(h1).toContainText("Power");
     await expect(h1).toContainText("Africa's Digital");
     await expect(h1).toContainText("Growth");
-    await expect(h1).toHaveCSS("font-size", "72px");
+    const isMobile = (viewport?.width ?? 1280) < 768;
+    await expect(h1).toHaveCSS("font-size", isMobile ? "48px" : "72px");
     await expect(h1).toHaveCSS("max-width", "896px");
   });
 
