@@ -1,51 +1,23 @@
+import { seoKeywords } from "@/lib/seo-keywords";
+
 export const siteConfig = {
   name: "StackForgeAI",
-  fullName: "StackForgeAI — Intelligent Software for Africa's Institutions",
+  fullName: "StackForgeAI — Intelligent Software for Africa's Institutions & European Partners",
   domain: "stackforgeai.africa",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://stackforgeai.africa",
   description:
-    "StackForgeAI builds AI-powered systems, platforms, and digital infrastructure for governments, universities, and businesses, from Rwanda to the rest of the continent.",
-  keywords: [
-    "StackForgeAI",
-    "software development Rwanda",
-    "software company Kigali",
-    "custom software Rwanda",
-    "web development Kigali",
-    "web development Rwanda",
-    "mobile app development Rwanda",
-    "AI company Rwanda",
-    "AI solutions Rwanda",
-    "artificial intelligence Kigali",
-    "machine learning Rwanda",
-    "digital transformation Rwanda",
-    "enterprise software Rwanda",
-    "government software Rwanda",
-    "ICT Rwanda",
-    "technology consulting Rwanda",
-    "SaaS Rwanda",
-    "cloud solutions Rwanda",
-    "business automation Rwanda",
-    "Education software Rwanda",
-    "edtech Rwanda",
-    "Education Platforms",
-    "Rwanda tech startup",
-    "Kigali software engineers",
-    "Africa",
-    "Rwanda",
-    "Kigali",
-    "Software development",
-    "Digital infrastructure",
-    "AI Systems",
-    "Government Tech",
-    "Custom Software",
-    "Web Applications",
-    "Automation",
-  ],
+    "StackForgeAI builds AI-powered software for African schools, universities, workshops, businesses, and governments — and partners with European enterprises on custom web, mobile, and automation systems from Kigali, Rwanda.",
+  keywords: seoKeywords,
   seo: {
     home: {
-      title: "StackForgeAI | Software & AI Development in Rwanda & Kigali",
+      title: "StackForgeAI | AI & Software for Africa — StackFix, StackEDU | Europe Partners",
       description:
-        "Leading software and AI company in Kigali, Rwanda: custom web & mobile apps, government and education platforms, digital transformation, and enterprise automation across Rwanda and Africa.",
+        "Africa-first AI and software company in Kigali: StackFix repair management, StackEDU for universities, Rwanda Directory, plus custom development for schools, workshops, SMEs, and European enterprise partners.",
+    },
+    stackfix: {
+      title: "StackFix | Repair App in Rwanda & Africa — Workshop & Ticket Management",
+      description:
+        "StackFix is the repair app built for Rwanda and Africa. Manage repair tickets, technicians, invoices and Mobile Money payments from one platform — for electronics shops, service centers and workshops in Kigali and across the continent.",
     },
   },
   author: {
@@ -63,7 +35,8 @@ export const siteConfig = {
   },
   links: {
     calendly: process.env.NEXT_PUBLIC_CALENDLY_URL ?? "https://calendly.com/stackforgeai/demo",
-    stackfix: "https://stackfix.app/dashboard",
+    stackfix: "/stackfix",
+    stackfixApp: "https://stackfix.app/dashboard",
     stackedu: "https://stackedu.app/dashboard",
     directory: "https://kgl.directory",
     github: "https://github.com/StackForgeAI-Projects",

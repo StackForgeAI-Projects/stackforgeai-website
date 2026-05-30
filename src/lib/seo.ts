@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
+import { stackfixSeoKeywords } from "@/lib/seo-keywords";
 import { absoluteUrl } from "@/lib/utils";
 
 /** Public Search Console verification token (also safe to override via env). */
@@ -55,7 +56,18 @@ export function buildMetadata(opts: SeoOptions = {}): Metadata {
     },
     alternates: {
       canonical: url,
-      languages: { en: url, "rw-RW": url },
+      languages: {
+        en: url,
+        "en-GB": url,
+        "en-US": url,
+        "rw-RW": url,
+        "fr-FR": url,
+        "de-DE": url,
+        "nl-NL": url,
+      },
+      types: {
+        "text/plain": [{ url: "/llms.txt", title: "LLMs.txt" }],
+      },
     },
     openGraph: {
       title,
@@ -70,8 +82,8 @@ export function buildMetadata(opts: SeoOptions = {}): Metadata {
           alt: siteConfig.fullName,
         },
       ],
-      locale: "en_US",
-      alternateLocale: ["rw_RW"],
+      locale: "en_GB",
+      alternateLocale: ["en_US", "rw_RW", "fr_FR", "de_DE", "nl_NL"],
       type: "website",
     },
     twitter: {
@@ -96,4 +108,39 @@ export function buildHomeMetadata(): Metadata {
     description: siteConfig.seo.home.description,
     path: "/",
   });
+}
+
+/** StackFix sales landing page metadata. */
+export function buildStackfixMetadata(): Metadata {
+  const meta = buildMetadata({
+    absoluteTitle: true,
+    title: siteConfig.seo.stackfix.title,
+    description: siteConfig.seo.stackfix.description,
+    path: "/stackfix",
+    image: "/stackfix/stackfix-dashboard.png",
+  });
+
+  return {
+    ...meta,
+    keywords: [...stackfixSeoKeywords],
+    openGraph: {
+      ...meta.openGraph,
+      title: siteConfig.seo.stackfix.title,
+      description: siteConfig.seo.stackfix.description,
+      images: [
+        {
+          url: absoluteUrl("/stackfix/stackfix-dashboard.png"),
+          width: 1024,
+          height: 586,
+          alt: "StackFix repair management dashboard for workshops in Rwanda and Africa",
+        },
+      ],
+    },
+    twitter: {
+      ...meta.twitter,
+      title: siteConfig.seo.stackfix.title,
+      description: siteConfig.seo.stackfix.description,
+      images: [absoluteUrl("/stackfix/stackfix-dashboard.png")],
+    },
+  };
 }

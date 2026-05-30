@@ -80,7 +80,8 @@ export default function PrivacyPage() {
             <p>
               We do not use tracking cookies. The site stores a single non-tracking{" "}
               <code>localStorage</code> key (<code>stackforgeai.lang</code>) to remember your
-              language preference.
+              language preference. When you choose Kinyarwanda, page translation is provided by
+              Google Translate (their servers may process page text per their privacy policy).
             </p>
             <h2 className="font-display text-foreground pt-4 text-2xl">6. Contact</h2>
             <p>

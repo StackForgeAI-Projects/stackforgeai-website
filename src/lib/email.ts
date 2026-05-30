@@ -20,11 +20,26 @@ export function getResend(): Resend | null {
 
 export type { SendContactArgs };
 
-export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: string }> {
-  const resend = getResend();
+/** Returns a human-readable misconfiguration reason, or null when ready to send. */
+export function getContactEmailConfigError(): string | null {
   const env = serverEnv();
+  if (!env.RESEND_API_KEY) {
+    return env.NODE_ENV === "production" ? "RESEND_API_KEY is not configured on the server" : null;
+  }
+  if (!env.CONTACT_FROM_EMAIL.includes("@")) {
+    return "CONTACT_FROM_EMAIL is invalid";
+  }
+  if (!env.CONTACT_TO_EMAIL.includes("@")) {
+    return "CONTACT_TO_EMAIL is invalid";
+  }
+  return null;
+}
 
-  if (!resend) {
+export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: string }> {
+  const env = serverEnv();
+  const configError = getContactEmailConfigError();
+
+  if (configError) {
     if (env.NODE_ENV !== "production") {
       console.warn("[email] RESEND_API_KEY missing — skipping send in non-production.", {
         name: args.name,
@@ -32,6 +47,11 @@ export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: st
       });
       return { id: "dev-noop" };
     }
+    throw new Error(configError);
+  }
+
+  const resend = getResend();
+  if (!resend) {
     throw new Error("Email transport not configured");
   }
 
@@ -39,7 +59,7 @@ export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: st
     console.warn(
       "[email] CONTACT_FROM_EMAIL and CONTACT_TO_EMAIL are the same address. " +
         "Inbound mail often lands in junk when a mailbox receives mail that appears to be from itself via Resend. " +
-        "Use a dedicated sender on send.stackforgeai.africa — see docs/EMAIL_DELIVERABILITY.md.",
+        "Use a dedicated sender such as contact@stackforgeai.africa (must differ from To) — see docs/EMAIL_DELIVERABILITY.md.",
     );
   }
 

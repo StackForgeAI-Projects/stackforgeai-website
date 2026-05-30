@@ -16,6 +16,7 @@ describe("contactSchema", () => {
     const result = contactSchema.safeParse({
       name: "A",
       email: "a@b.co",
+      company: "Co",
       message: "1234567890",
     });
     expect(result.success).toBe(false);
@@ -25,6 +26,7 @@ describe("contactSchema", () => {
     const result = contactSchema.safeParse({
       name: "Aline",
       email: "not-an-email",
+      company: "Co",
       message: "1234567890",
     });
     expect(result.success).toBe(false);
@@ -34,6 +36,7 @@ describe("contactSchema", () => {
     const result = contactSchema.safeParse({
       name: "Aline",
       email: "a@b.co",
+      company: "Co",
       message: "hi",
     });
     expect(result.success).toBe(false);
@@ -43,8 +46,19 @@ describe("contactSchema", () => {
     const result = contactSchema.safeParse({
       name: "Aline",
       email: "a@b.co",
+      company: "Co",
       message: "Hello there, this is a long enough message.",
       website: "I'm a bot",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects empty company", () => {
+    const result = contactSchema.safeParse({
+      name: "Aline",
+      email: "a@b.co",
+      company: "",
+      message: "Hello there, this is a long enough message.",
     });
     expect(result.success).toBe(false);
   });
@@ -53,6 +67,7 @@ describe("contactSchema", () => {
     const result = contactSchema.safeParse({
       name: "Aline",
       email: "ALine@EXAMPLE.com",
+      company: "Acme",
       message: "Hello there, this is a long enough message.",
     });
     expect(result.success).toBe(true);

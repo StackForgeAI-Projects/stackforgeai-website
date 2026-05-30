@@ -9,15 +9,17 @@ Contact submissions use **Resend** (`POST /api/contact` → `sendContactEmail`).
 | Issue | Why it hurts |
 | --- | --- |
 | **Same From and To** (`hello@` → `hello@` via Resend) | SiteGround/antispam treats it as spoofed “self-mail” from an external relay. |
+| **Unverified From domain** | Resend returns **403 Domain not verified** — e.g. `contact@send.stackforgeai.africa` when only `stackforgeai.africa` is verified. |
 | **SPF missing Resend** on apex | Live SPF often only authorises SiteGround; Resend sends from Amazon SES IPs → SPF fail/softfail. |
 | **HTML-only** | Multipart plain+HTML scores better with filters. |
 | **Weak Reply-To** | Bare email without display name reduces trust in some clients. |
 
 Verified on `stackforgeai.africa` (May 2026):
 
+- Resend Domains → **`stackforgeai.africa` verified** (apex)
+- **`send.stackforgeai.africa` not verified** in Resend → do **not** use `@send.` until added and verified
 - MX → SiteGround antispam (`mailspamprotection.com`)
 - Apex SPF → SiteGround only (`dnssmarthost.net`), **no** `include:resend.com`
-- `send.stackforgeai.africa` TXT → `v=spf1 include:amazonses.com ~all` (Resend path)
 - Apex `resend._domainkey` → present (Resend DKIM)
 - DMARC → `p=none` (Brevo reporting)
 
@@ -28,18 +30,18 @@ Verified on `stackforgeai.africa` (May 2026):
 ### 1 · Vercel / `.env.local`
 
 ```env
-CONTACT_FROM_EMAIL="StackForgeAI Contact Form <contact@send.stackforgeai.africa>"
+CONTACT_FROM_EMAIL="StackForgeAI Contact Form <contact@stackforgeai.africa>"
 CONTACT_TO_EMAIL=hello@stackforgeai.africa
 RESEND_API_KEY=re_...
 ```
 
-**From must not equal To.** After changing env on Vercel, **redeploy production**.
+**From must not equal To.** Use the **verified apex domain** (`@stackforgeai.africa`). After changing env on Vercel, **redeploy production**.
 
 ### 2 · Resend dashboard
 
 1. Domains → `stackforgeai.africa` → **Verified** (green).
-2. Confirm **send** subdomain records exist (SPF `include:amazonses.com`, feedback CNAME if shown).
-3. Resend → API Keys → key matches `RESEND_API_KEY`.
+2. Resend → API Keys → key matches `RESEND_API_KEY`.
+3. *(Optional later)* Add and verify `send.stackforgeai.africa` if you want a dedicated transactional subdomain.
 
 ### 3 · DNS (Cloudflare / SiteGround DNS)
 
@@ -50,12 +52,6 @@ v=spf1 include:stackforgeai.africa.spf.auto.dnssmarthost.net include:resend.com 
 ```
 
 Keep existing Brevo verification TXT as a **separate** record if required.
-
-**`send` subdomain** (already used by Resend):
-
-```txt
-send    TXT    v=spf1 include:amazonses.com ~all
-```
 
 **Resend DKIM** (apex):
 
@@ -78,15 +74,15 @@ Do **not** proxy MX/TXT mail records through Cloudflare orange cloud — DNS onl
 ```bash
 dig MX stackforgeai.africa +short
 dig TXT stackforgeai.africa +short
-dig TXT send.stackforgeai.africa +short
 dig TXT resend._domainkey.stackforgeai.africa +short
 dig TXT _dmarc.stackforgeai.africa +short
 ```
 
 1. Submit the live contact form once.
-2. In SiteGround webmail, open the message → **View headers**.
-3. Confirm **SPF: pass**, **DKIM: pass**, **DMARC: pass** (or none with aligned DKIM).
-4. Move one test from junk to inbox and mark **Not spam** (trains the filter once auth is fixed).
+2. In Resend → Logs — status should be **200**, not **403 Domain not verified**.
+3. In SiteGround webmail, open the message → **View headers**.
+4. Confirm **SPF: pass**, **DKIM: pass**, **DMARC: pass** (or none with aligned DKIM).
+5. Move one test from junk to inbox and mark **Not spam** (trains the filter once auth is fixed).
 
 Optional: send a test to [mail-tester.com](https://www.mail-tester.com) using the same From address.
 
@@ -94,7 +90,7 @@ Optional: send a test to [mail-tester.com](https://www.mail-tester.com) using th
 
 ## Application behaviour (code)
 
-- **From:** `contact@send.stackforgeai.africa` (transactional subdomain)
+- **From:** `contact@stackforgeai.africa` (verified apex domain)
 - **To:** `hello@stackforgeai.africa` (monitored inbox)
 - **Reply-To:** visitor `Name <email@domain>` (reply goes to the enquirer)
 - **Multipart:** HTML (React Email) + plain text
@@ -107,7 +103,7 @@ See `src/lib/email.ts` and `src/lib/contact-email-content.ts`.
 
 ## SiteGround inbox rule (optional)
 
-After DNS is correct, add a filter: **From contains** `send.stackforgeai.africa` → move to Inbox. Remove once placement is stable.
+After DNS is correct, add a filter: **From contains** `contact@stackforgeai.africa` → move to Inbox. Remove once placement is stable.
 
 ---
 
