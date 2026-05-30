@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 import { Check, Globe, Menu } from "lucide-react";
 import { siteConfig } from "@/lib/site";
+import { siteNavScrolledBarStyle } from "@/lib/site-nav-styles";
 import { useLang, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -29,13 +29,6 @@ export function Nav() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  /** Shared bar background when pinned (matches previous scrolled gradient). */
-  const scrolledBarStyle: CSSProperties = {
-    background: "linear-gradient(135deg, oklch(0.32 0.10 150 / 0.94), oklch(0.26 0.08 155 / 0.94))",
-    backdropFilter: "blur(20px) saturate(160%)",
-    WebkitBackdropFilter: "blur(20px) saturate(160%)",
-  };
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -64,7 +57,7 @@ export function Nav() {
                 ? "border-primary/50 w-full rounded-t-none rounded-b-3xl border-b px-0 py-3 shadow-[0_16px_48px_-20px_oklch(0_0_0/0.55)]"
                 : "glass rounded-full py-2 pr-2 pl-4 shadow-none sm:pl-5",
             )}
-            style={scrolled ? scrolledBarStyle : undefined}
+            style={scrolled ? siteNavScrolledBarStyle : undefined}
           >
             <div
               className={cn(

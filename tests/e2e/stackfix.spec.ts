@@ -15,12 +15,12 @@ test.describe("StackFix landing page", () => {
 
   test("uses homepage logo in navigation", async ({ page }) => {
     await page.goto("/stackfix");
-    const logoLink = page.locator("header nav").getByRole("link", { name: /StackForgeAI home/i });
+    const logoLink = page.locator("header").getByRole("link", { name: /StackForgeAI home/i });
     await expect(logoLink).toHaveAttribute("href", "/");
     const logo = logoLink.getByRole("img", { name: "StackForgeAI" });
     await expect(logo).toBeVisible();
     await expect(logo).toHaveAttribute("src", /logo\.png/);
-    await expect(page.locator("header nav")).not.toContainText("StackFix");
+    await expect(page.locator("header")).not.toContainText("StackFix");
   });
 
   test("renders hero headline from translations", async ({ page }) => {
@@ -57,8 +57,24 @@ test.describe("StackFix landing page", () => {
   test("language switcher changes locale label", async ({ page }) => {
     await page.goto("/stackfix");
     await page.getByRole("button", { name: "Change language" }).click();
-    await page.getByRole("option", { name: /Kinyarwanda/i }).click();
+    await page.getByRole("menuitemradio", { name: /Kinyarwanda/i }).click();
     await expect(page.getByRole("button", { name: "Change language" })).toContainText("RW");
+  });
+
+  test("mobile menu exposes navigation links", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/stackfix");
+    await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+    await expect(
+      page.locator("header").getByRole("link", { name: "Book a Free Demo" }),
+    ).toBeHidden();
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await expect(page.getByRole("navigation", { name: "Mobile primary" })).toBeVisible();
+    await page
+      .getByRole("navigation", { name: "Mobile primary" })
+      .getByRole("link", { name: "Pricing" })
+      .click();
+    await expect(page).toHaveURL(/#pricing$/);
   });
 
   test("trial modal opens from starter plan", async ({ page }) => {
