@@ -103,7 +103,7 @@ export const en: SiteDict = {
   "contact.tab.message": "Send message",
   "contact.tab.cal.fallback": "Loading scheduler…",
   "contact.send": "Send message",
-  "contact.sent": "Message sent ✓",
+  "contact.sent": "Message sent ✓ We'll get back to you within 48 hours.",
   "contact.sending": "Sending…",
   "contact.error": "Something went wrong. Please try again.",
   "contact.error.network": "Network error. Please check your connection.",

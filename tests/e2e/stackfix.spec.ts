@@ -92,7 +92,9 @@ test.describe("StackFix landing page", () => {
     await page.getByPlaceholder("you@shop.rw").fill("demo@shop.rw");
     await page.getByRole("button", { name: /Send message/i }).click();
 
-    await expect(page.getByText("Message sent ✓")).toBeVisible();
+    await expect(
+      page.getByText(/Message sent ✓ We'll get back to you within 48 hours\./),
+    ).toBeVisible();
   });
 
   test("no critical accessibility violations on stackfix", async ({ page }) => {
