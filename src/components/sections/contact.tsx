@@ -9,6 +9,7 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
 import { contactSchema, type ContactInput } from "@/lib/contact-schema";
+import { submitContactForm } from "@/lib/submit-contact-form";
 import { CONTACT_TAB_EVENT, type ContactTab, type ContactTabEvent } from "@/lib/contact-events";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -314,32 +315,17 @@ function ContactForm() {
 
   const onSubmit = async (data: ContactInput) => {
     setAlert(null);
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const body = (await res.json().catch(() => ({}))) as { error?: string };
-      if (res.status === 429) {
-        setAlert({
-          variant: "error",
-          message: body.error ?? "Too many requests. Please try again in an hour.",
-        });
-        return;
-      }
-      if (!res.ok) {
-        setAlert({
-          variant: "error",
-          message: body.error ?? t("contact.error"),
-        });
-        return;
-      }
-      reset();
-      setAlert({ variant: "success", message: t("contact.sent") });
-    } catch {
-      setAlert({ variant: "error", message: t("contact.error.network") });
+    const result = await submitContactForm(
+      { ...data, source: "website" },
+      t("contact.error"),
+      t("contact.error.network"),
+    );
+    if (!result.ok) {
+      setAlert({ variant: "error", message: result.message });
+      return;
     }
+    reset();
+    setAlert({ variant: "success", message: t("contact.sent") });
   };
 
   return (

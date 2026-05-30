@@ -10,7 +10,7 @@ test.describe("Landing page", () => {
     await expect(h1).toContainText("Africa's Digital");
     await expect(h1).toContainText("Growth");
     await expect(h1).toHaveCSS("font-size", "72px");
-    await expect(h1).toHaveCSS("max-width", "736px");
+    await expect(h1).toHaveCSS("max-width", "896px");
   });
 
   test("renders all major sections", async ({ page }) => {

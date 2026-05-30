@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/contact-schema";
 import { checkContactRateLimit, getClientIp } from "@/lib/rate-limit";
+import { mapContactSendError } from "@/lib/contact-email-content";
 import { sendContactEmail } from "@/lib/email";
 import { serverEnv } from "@/lib/env";
 
@@ -82,6 +83,8 @@ export async function POST(request: Request) {
       email: parsed.data.email,
       company: parsed.data.company,
       message: parsed.data.message,
+      phone: parsed.data.phone || undefined,
+      source: parsed.data.source,
       ip,
       userAgent: request.headers.get("user-agent") ?? undefined,
     });
@@ -92,13 +95,8 @@ export async function POST(request: Request) {
       err: message,
       env: serverEnv().NODE_ENV,
     });
-    if (/not configured|RESEND_API_KEY|invalid/i.test(message)) {
-      return jsonError(
-        503,
-        "Contact form is temporarily unavailable. Please email hello@stackforgeai.africa directly.",
-      );
-    }
-    return jsonError(500, "Failed to send message. Please try again.");
+    const mapped = mapContactSendError(err);
+    return jsonError(mapped.status, mapped.message);
   }
 }
 

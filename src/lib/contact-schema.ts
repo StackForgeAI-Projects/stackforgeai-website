@@ -13,6 +13,8 @@ export const contactSchema = z.object({
     .min(10, { message: "Message must be at least 10 characters" })
     .max(5000)
     .trim(),
+  phone: z.string().max(40).trim().optional().or(z.literal("")),
+  source: z.enum(["website", "stackfix"]).optional(),
   // Honeypot — must be empty
   website: z.string().max(0).optional().or(z.literal("")),
 });

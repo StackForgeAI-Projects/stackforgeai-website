@@ -17,7 +17,7 @@ export function HowItWorks() {
           {t.how.steps.map((s) => (
             <div key={s.n} className="bg-background border-border rounded-2xl border p-6">
               <div className="text-brand mb-8 font-mono text-sm">
-                {s.n} — {s.name}
+                {s.n} · {s.name}
               </div>
               <h3 className="mb-2 text-lg font-semibold">{s.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>

@@ -51,4 +51,20 @@ describe("stackfix landing config", () => {
     const app = nodes.find((n) => n["@type"] === "SoftwareApplication") as Record<string, unknown>;
     expect(String(app.keywords)).toContain("repair app in Rwanda");
   });
+
+  it("includes contact form feedback strings in every locale", () => {
+    for (const lang of Object.keys(stackfixDict) as Array<keyof typeof stackfixDict>) {
+      const contact = stackfixDict[lang].contact;
+      expect(contact.formSent).toBeTruthy();
+      expect(contact.formSending).toBeTruthy();
+      expect(contact.formError).toBeTruthy();
+      expect(contact.formNetworkError).toBeTruthy();
+    }
+  });
+
+  it("uses no em dash in user-facing stackfix copy", () => {
+    for (const lang of Object.values(stackfixDict)) {
+      expect(JSON.stringify(lang)).not.toContain("—");
+    }
+  });
 });
