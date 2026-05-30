@@ -10,7 +10,7 @@ const serverSchema = z.object({
   CONTACT_FROM_EMAIL: z
     .string()
     .min(1)
-    .default("StackForgeAI Contact Form <contact@send.stackforgeai.africa>"),
+    .default("StackForgeAI Contact Form <contact@stackforgeai.africa>"),
   CONTACT_TO_EMAIL: z.string().email().default("hello@stackforgeai.africa"),
   BREVO_API_KEY: z.string().min(1).optional(),
   BREVO_LIST_ID: z.coerce.number().int().positive().default(1),

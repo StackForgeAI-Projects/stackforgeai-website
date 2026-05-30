@@ -32,7 +32,23 @@ Direct `git push origin main` is **blocked** once branch protection is enabled (
 
 ## One-time GitHub setup (repo admin)
 
-Run from a machine with [`gh`](https://cli.github.com/) authenticated as an admin:
+### Git identity (StackForge — not DevStars)
+
+Every commit must use the **@stackforgeai** identity so GitHub and Vercel show StackForge, not `emmanuel@devstars.co.uk`.
+
+Run **once per clone**:
+
+```bash
+./scripts/setup-git-identity.sh
+```
+
+Verify: `git config user.email` → `283279871+stackforgeai@users.noreply.github.com`
+
+> Past commits keep their old author. Only **new** commits change. Do not rewrite history.
+
+### Branch protection
+
+Run from a machine with [`gh`](https://cli.github.com/) authenticated as **stackforgeai** (admin):
 
 ```bash
 ./scripts/configure-branch-protection.sh
@@ -41,8 +57,9 @@ Run from a machine with [`gh`](https://cli.github.com/) authenticated as an admi
 This configures `main` and `develop` to:
 
 - Require a pull request before merging
-- Require **1 approving review** (CODEOWNERS where defined)
+- Require **1 approving review** from **@stackforgeai** (CODEOWNERS)
 - Require CI jobs **Lint · Typecheck · Test** and **Build**
+- **Restrict push/merge to @stackforgeai only** (blocks DevStars/personal accounts)
 - Block force-push and branch deletion
 - Apply rules to administrators (`enforce_admins`)
 
@@ -54,10 +71,11 @@ This configures `main` and `develop` to:
 
 ### Vercel project settings (dashboard)
 
-1. **Settings → Git → Production Branch:** `main`
-2. **Settings → Git → Deploy Hooks:** optional backup hook (store URL as `VERCEL_DEPLOY_HOOK_URL` if using manual release workflow)
-3. **Settings → Git:** ensure **Preview Deployments** are enabled for pull requests
-4. Confirm `vercel.json` matches: production on `main`, previews on `develop` and PRs
+1. **Transfer ownership** if the project still lives under a DevStars/personal Vercel team — move it to the **StackForge** Vercel team.
+2. **Settings → Git:** disconnect and reconnect using the **@stackforgeai** GitHub account (or a StackForge org admin).
+3. **Settings → Git → Production Branch:** `main`
+4. **Team members:** only StackForge staff; each member links their GitHub in Vercel → Account Settings.
+5. **Preview Deployments** enabled for pull requests; Dependabot PRs target **`develop`** (not `main`).
 
 Do **not** disable the GitHub integration; production should deploy **only when merges land on `main`**, not when someone bypasses protection.
 

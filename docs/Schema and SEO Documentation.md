@@ -6,8 +6,8 @@ This document describes how structured data (Schema.org JSON-LD), meta tags, and
 
 ## 1. Goals
 
-- Make entity and service meaning explicit to Google and other crawlers (Organization, WebSite, WebPage, services, products).
-- Align copy with **Rwanda** and **Kigali** commercial intent for software, AI, ICT, and digital transformation—without keyword stuffing visible UI copy (keywords live primarily in `keywords`, schema `knowsAbout`, and dedicated meta descriptions).
+- Make entity and service meaning explicit to Google, Bing, and AI crawlers (Organization, WebSite, WebPage, FAQPage, ItemList, services, products).
+- Align copy with **Africa** (Rwanda/Kigali HQ), **European partner markets**, schools, universities, workshops, and businesses—without keyword stuffing visible UI copy (keywords live in `src/lib/seo-keywords.ts`, schema `knowsAbout`, meta descriptions, and `public/llms*.txt`).
 - Keep one canonical site URL via `metadataBase`, `alternates.canonical`, and `robots.txt` / `sitemap.xml`.
 
 ---
@@ -17,6 +17,7 @@ This document describes how structured data (Schema.org JSON-LD), meta tags, and
 | Concern | Location |
 |--------|-----------|
 | Site URLs, keywords, homepage SEO title/description | `src/lib/site.ts` |
+| Keyword corpus (Africa, Europe, products, AI discovery) | `src/lib/seo-keywords.ts` |
 | Default metadata builder, Search Console token helper, `buildHomeMetadata()` | `src/lib/seo.ts` |
 | JSON-LD `@graph` builders | `src/lib/schema.ts` |
 | Global meta + root `@graph` scripts | `src/app/layout.tsx` |
@@ -24,6 +25,7 @@ This document describes how structured data (Schema.org JSON-LD), meta tags, and
 | Legal/static pages meta | `src/app/privacy/page.tsx`, `src/app/terms/page.tsx`, … |
 | Sitemap | `src/app/sitemap.ts` |
 | Robots | `src/app/robots.ts` |
+| AI crawler summary (`llms.txt`) | `public/llms.txt`, `public/llms-full.txt` |
 | GA4 (`gtag.js`) | `src/components/google-analytics.tsx`, CSP in `next.config.ts` |
 
 ---
@@ -56,8 +58,9 @@ Canonical URL uses `absoluteUrl()` + `NEXT_PUBLIC_SITE_URL` (see `src/lib/utils.
 
 `rootStructuredDataGraph()` (`src/lib/schema.ts`) outputs one `<script type="application/ld+json">` with:
 
-- **`Organization`** (`@id`: `{origin}/#organization`): name, URL, logo, description, address (Kigali, RW), geo coordinates, contact points (email + phone), `sameAs` (GitHub), `knowsAbout`, `areaServed`, **`hasOfferCatalog`** (three core services matching the marketing site).
-- **`WebSite`** (`@id`: `{origin}/#website`): site URL, languages `en` / `rw`, `publisher` → Organization `@id`.
+- **`Organization`** + **`ProfessionalService`** (`@id`: `{origin}/#organization`): name, URL, logo, description, address (Kigali, RW), geo coordinates, contact points (email + phone), `sameAs` (GitHub, Calendly), expanded `knowsAbout`, `areaServed` (Africa + Europe country codes), **`hasOfferCatalog`** (three core services), **`makesOffer`** (product catalog).
+- **`WebSite`** (`@id`: `{origin}/#website`): site URL, languages `en` / `rw` / `fr` / `de`, `publisher` → Organization, `SearchAction` potentialAction.
+- **`SoftwareApplication`** nodes for StackFix, StackEDU, Rwanda Directory (stable `@id` fragments under `/#product-*`).
 
 Stable `@id` fragments allow other nodes to reference the same entities without duplication errors.
 
@@ -65,8 +68,11 @@ Stable `@id` fragments allow other nodes to reference the same entities without 
 
 `homeStructuredDataGraph()` adds:
 
-- **`WebPage`** (`@id`: `{origin}/#webpage`): URL `/`, title/description from `siteConfig.seo.home`, `isPartOf` → WebSite, `about` → Organization, `primaryImageOfPage` → OG image.
-- **`SoftwareApplication`** nodes for **StackFix**, **StackEDU**, and **Rwanda Directory** (links from `siteConfig.links`), each with `provider` → Organization.
+- **`WebPage`** (`@id`: `{origin}/#webpage`): URL `/`, title/description from `siteConfig.seo.home`, `isPartOf` → WebSite, `about` → Organization, `primaryImageOfPage` → OG image, `speakable` CSS selectors.
+- **`FAQPage`**: five common questions about StackForgeAI, products, audiences, location, contact.
+- **`ItemList`**: ordered list of StackFix, StackEDU, Rwanda Directory.
+
+Product **`SoftwareApplication`** entities are defined once in the root graph and referenced from the homepage ItemList.
 
 ### 5.3 Validation
 
@@ -79,18 +85,20 @@ Fix any reported errors before relying on rich snippets.
 
 ---
 
-## 6. Keywords & Rwanda / Kigali focus
+## 6. Keywords, Africa, Europe & AI discoverability
 
-High-intent phrases used for **`keywords` meta** and as seeds for **`knowsAbout`** include variations such as:
+Keywords are generated in **`src/lib/seo-keywords.ts`** and imported by `siteConfig.keywords`. Categories include:
 
-- Software / web / mobile development **Rwanda** · **Kigali**
-- **AI** / machine learning / digital transformation **Rwanda**
-- Enterprise / government **software** · **ICT** Rwanda
-- Education / **edtech** Rwanda
+- **Brand:** StackForgeAI, stackforgeai.africa
+- **Products:** StackFix, StackEDU, Rwanda Directory
+- **Services:** custom web/mobile, AI software, maintenance
+- **Africa audiences:** schools, universities, workshops, SMEs, govtech, edtech
+- **Geography:** Rwanda/Kigali/East Africa + European markets (UK, DACH, Benelux, Nordics, etc.)
+- **AI discovery:** intelligent automation, LLM integration, AI for education/government
 
-**Important:** Google largely ignores the legacy `keywords` meta for ranking; it is kept for completeness and internal consistency. **Primary ranking signals** are: useful content, strong titles/descriptions, internal linking, Core Web Vitals, backlinks, and correct structured data—not repeating keywords in visible text unnaturally.
+**`public/llms.txt`** and **`public/llms-full.txt`** provide machine-readable summaries for AI assistants (ChatGPT, Claude, Perplexity, etc.). **`robots.ts`** explicitly allows major AI crawlers on `/`, `/llms.txt`, and `/llms-full.txt`.
 
-When updating copy, prefer natural language; adjust `siteConfig.seo.home` and `keywords` together.
+**Important:** No one can guarantee “#1 ranking.” Strong SEO means accurate structured data, fast pages, useful content, backlinks, and consistent entity signals—not keyword repetition in visible text.
 
 ---
 

@@ -12,6 +12,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/com
 
 const langs: { code: Lang; label: string; full: string }[] = [
   { code: "en", label: "ENG", full: "English" },
+  { code: "fr", label: "FRA", full: "Français" },
   { code: "rw", label: "RWA", full: "Kinyarwanda" },
 ];
 
@@ -110,7 +111,7 @@ export function Nav() {
               </nav>
 
               <div className="flex shrink-0 items-center gap-2">
-                <div ref={langMenuRef} className="relative">
+                <div ref={langMenuRef} className="notranslate relative" translate="no" lang="en">
                   <button
                     type="button"
                     onClick={() => setLangOpen((o) => !o)}
@@ -130,6 +131,7 @@ export function Nav() {
                   {langOpen && (
                     <div
                       role="menu"
+                      aria-label="Language"
                       className="border-border bg-surface/95 absolute top-full right-0 z-[60] mt-2 w-44 rounded-2xl border p-1.5 shadow-xl backdrop-blur-md"
                     >
                       {langs.map((l) => (
@@ -146,7 +148,7 @@ export function Nav() {
                         >
                           <span className="flex items-center gap-2">
                             <span className="text-primary font-mono text-xs">{l.label}</span>
-                            <span>{l.full}</span>
+                            <span lang="en">{l.full}</span>
                           </span>
                           {lang === l.code && (
                             <Check className="text-primary h-4 w-4" aria-hidden />

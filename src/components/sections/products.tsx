@@ -18,6 +18,7 @@ type Product = {
   illustration: IllustrationKind;
   cta?: boolean;
   href?: string;
+  external?: boolean;
 };
 
 const products: Product[] = [
@@ -39,6 +40,8 @@ const products: Product[] = [
     statusVariant: "dev",
     illustration: "education",
     cta: true,
+    href: siteConfig.links.stackedu,
+    external: true,
   },
   {
     name: "Rwanda Directory",
@@ -133,8 +136,8 @@ export function Products() {
                     ) : p.cta ? (
                       <a
                         href={p.href ?? "#contact"}
-                        target={p.href ? "_blank" : undefined}
-                        rel={p.href ? "noopener noreferrer" : undefined}
+                        target={p.external ? "_blank" : undefined}
+                        rel={p.external ? "noopener noreferrer" : undefined}
                         className="text-primary focus-visible:ring-primary/60 focus-visible:ring-offset-background mt-6 inline-flex w-fit items-center gap-2 rounded-full font-mono text-sm tracking-wider uppercase transition-all hover:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                       >
                         {t("products.tryNow")}

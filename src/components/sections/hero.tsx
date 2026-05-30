@@ -129,10 +129,13 @@ export function Hero() {
 
         <h1
           data-hero-anim
-          className="font-display mx-auto mt-8 max-w-5xl text-5xl leading-[1.02] font-semibold tracking-tight sm:text-6xl lg:text-7xl xl:text-[88px]"
+          className="font-display mx-auto mt-8 max-w-[46rem] text-[72px] leading-[1.05] font-semibold tracking-tight"
         >
-          {t("hero.title.1")} <span className="text-gradient-green">{t("hero.title.2")}</span>{" "}
-          {t("hero.title.3")}
+          {t("hero.title.1")}
+          <br />
+          <span className="text-gradient-green">{t("hero.title.2")}</span> {t("hero.title.3")}
+          <br />
+          {t("hero.title.4")}
         </h1>
 
         <p

@@ -3,16 +3,18 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
 import { useLang } from "@/lib/i18n";
 import { siteConfig, PRODUCT_SECTION_IDS } from "@/lib/site";
 import { newsletterSchema } from "@/lib/contact-schema";
+import { FormAlert } from "@/components/ui/form-alert";
 
 export function Footer() {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState(""); // honeypot
-  const [subscribed, setSubscribed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [alert, setAlert] = useState<{ variant: "success" | "error"; message: string } | null>(
+    null,
+  );
   const { t } = useLang();
 
   const companySections = siteConfig.nav
@@ -21,7 +23,7 @@ export function Footer() {
 
   const productLinks = [
     {
-      href: `/#${PRODUCT_SECTION_IDS.stackfix}`,
+      href: siteConfig.links.stackfix,
       labelKey: "footer.product.stackfix" as const,
     },
     {
@@ -36,9 +38,13 @@ export function Footer() {
 
   const onSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setAlert(null);
     const parsed = newsletterSchema.safeParse({ email, fullName });
     if (!parsed.success) {
-      toast.error(parsed.error.errors[0]?.message ?? "Invalid email");
+      setAlert({
+        variant: "error",
+        message: parsed.error.errors[0]?.message ?? "Please enter a valid email",
+      });
       return;
     }
     setSubmitting(true);
@@ -48,19 +54,22 @@ export function Footer() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),
       });
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
       if (res.status === 429) {
-        toast.error("Too many requests. Try again later.");
+        setAlert({
+          variant: "error",
+          message: body.error ?? "Too many requests. Try again later.",
+        });
         return;
       }
       if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? "Subscription failed");
+        setAlert({ variant: "error", message: body.error ?? "Subscription failed" });
+        return;
       }
-      setSubscribed(true);
-      toast.success(t("footer.subscribed"));
       setEmail("");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Subscription failed");
+      setAlert({ variant: "success", message: t("footer.subscribed.detail") });
+    } catch {
+      setAlert({ variant: "error", message: "Subscription failed. Please try again." });
     } finally {
       setSubmitting(false);
     }
@@ -163,12 +172,10 @@ export function Footer() {
             />
             <button
               type="submit"
-              disabled={submitting || subscribed}
+              disabled={submitting}
               className="btn-press group bg-primary text-primary-foreground glow-green focus-visible:ring-primary/70 focus-visible:ring-offset-background inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-70 disabled:hover:translate-y-0"
             >
-              {subscribed ? (
-                t("footer.subscribed")
-              ) : submitting ? (
+              {submitting ? (
                 "…"
               ) : (
                 <>
@@ -180,6 +187,14 @@ export function Footer() {
               )}
             </button>
           </form>
+          {alert ? (
+            <FormAlert
+              variant={alert.variant}
+              message={alert.message}
+              onDismiss={() => setAlert(null)}
+              className="max-w-xl"
+            />
+          ) : null}
         </div>
       </div>
 

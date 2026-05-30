@@ -2,6 +2,17 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test.describe("Landing page", () => {
+  test("renders hero headline at 72px in three lines", async ({ page }) => {
+    await page.goto("/");
+    const h1 = page.getByRole("heading", { level: 1 });
+    await expect(h1).toContainText("Building Solutions That");
+    await expect(h1).toContainText("Power");
+    await expect(h1).toContainText("Africa's Digital");
+    await expect(h1).toContainText("Growth");
+    await expect(h1).toHaveCSS("font-size", "72px");
+    await expect(h1).toHaveCSS("max-width", "736px");
+  });
+
   test("renders all major sections", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -19,17 +30,35 @@ test.describe("Landing page", () => {
     await expect(page).toHaveURL(/#products$/);
   });
 
-  test("language toggle persists", async ({ page }) => {
+  test("language switcher applies internal French copy", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Change language" }).click();
+    await page.getByRole("menuitemradio", { name: /Français/i }).click();
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem("stackforgeai.lang")))
+      .toBe("fr");
+    await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+    await expect(page.getByRole("link", { name: "Contactez-nous" }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Construire des solutions qui",
+    );
+  });
+
+  test("language switcher applies internal Kinyarwanda copy", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Change language" }).click();
     await page.getByRole("menuitemradio", { name: /Kinyarwanda/i }).click();
+    await expect
+      .poll(() => page.evaluate(() => localStorage.getItem("stackforgeai.lang")))
+      .toBe("rw");
     await expect(page.locator("html")).toHaveAttribute("lang", "rw");
-    await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("lang", "rw");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Guteza imbere ibisubizo");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Afurika");
   });
 
   test("contact form blocks invalid submissions", async ({ page }) => {
     await page.goto("/#contact");
+    await page.getByRole("tab", { name: /Send message/i }).click();
     await page.getByPlaceholder(/Name/i).first().fill("A");
     await page.getByPlaceholder(/Email/i).first().fill("not-an-email");
     await page.getByPlaceholder(/project/i).fill("hi");

@@ -1,0 +1,35 @@
+# StackForgeAI
+
+> Intelligent software for Africa's schools, universities, workshops, businesses, and governments — trusted by European partners for custom AI, web, and mobile systems.
+
+## Canonical
+
+- Website: https://stackforgeai.africa
+- Organization: StackForgeAI (Kigali, Rwanda)
+- Contact: hello@stackforgeai.africa
+- Phone: +250 799 486 531
+- GitHub: https://github.com/StackForgeAI-Projects
+
+## About
+
+StackForgeAI builds AI-powered platforms and digital infrastructure for institutions across Africa, with European enterprises as a primary partner audience. We deliver custom software, automation, and productized SaaS from Rwanda to the continent and global markets.
+
+## Products
+
+- **StackFix** — Repair and field-service management: workflows, technicians, service requests. https://stackfix.app/dashboard
+- **StackEDU** — Tertiary education management: students, academic records, administration. https://stackedu.app/dashboard
+- **Rwanda Directory** — Registered business directory by industry for discovery across Rwanda. https://kgl.directory
+
+## Services
+
+- Custom web and mobile development
+- AI products and bespoke intelligent software
+- Maintenance, monitoring, and ongoing support
+
+## Audiences
+
+Schools, universities, vocational workshops, SMEs, enterprises, government agencies, NGOs, and European organizations seeking Africa-first engineering partners.
+
+## Full reference
+
+See https://stackforgeai.africa/llms-full.txt for extended product, service, and keyword context for AI assistants and search systems.

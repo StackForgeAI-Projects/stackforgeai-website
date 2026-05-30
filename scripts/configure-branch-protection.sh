@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Configure GitHub branch protection for StackForgeAI website.
-# Requires: gh CLI (https://cli.github.com/) authenticated with admin access.
+# Requires: gh CLI (https://cli.github.com/) authenticated as stackforgeai (admin).
 #
 # Usage:
 #   ./scripts/configure-branch-protection.sh
@@ -9,8 +9,11 @@
 set -euo pipefail
 
 REPO="${1:-StackForgeAI-Projects/stackforgeai-website}"
+# Only this GitHub user may push/merge to protected branches (StackForge, not DevStars).
+ALLOWED_PUSH_USER="stackforgeai"
 
 echo "→ Applying branch protection on ${REPO} (main + develop)…"
+echo "  Push/merge restricted to: ${ALLOWED_PUSH_USER}"
 
 apply_protection() {
   local branch="$1"
@@ -30,7 +33,11 @@ apply_protection() {
     "required_approving_review_count": 1,
     "require_last_push_approval": true
   },
-  "restrictions": null,
+  "restrictions": {
+    "users": ["${ALLOWED_PUSH_USER}"],
+    "teams": [],
+    "apps": []
+  },
   "required_linear_history": false,
   "allow_force_pushes": false,
   "allow_deletions": false,
@@ -46,4 +53,4 @@ apply_protection develop
 
 echo ""
 echo "Done. Verify in GitHub → Settings → Branches."
-echo "Direct pushes to main/develop are now rejected; use Pull Requests."
+echo "Only @${ALLOWED_PUSH_USER} can merge to main/develop; use Pull Requests."

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGSAP } from "@gsap/react";
-import { toast } from "sonner";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
@@ -16,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SfWatermark } from "@/components/sf-watermark";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
+import { FormAlert } from "@/components/ui/form-alert";
 import { cn } from "@/lib/utils";
 
 const CAL_NAMESPACE = "15min";
@@ -149,19 +150,7 @@ export function Contact() {
                 aria-hidden
                 className="glass text-primary flex h-10 w-10 items-center justify-center rounded-xl"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden
-                >
-                  <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 3.36L3 21" />
-                  <path d="M9 10c.5 2.5 2.5 4.5 5 5l1.5-1.5c.3-.3.7-.4 1-.2l2 .9c.4.2.6.6.5 1A4 4 0 0 1 15 18a9 9 0 0 1-9-9 4 4 0 0 1 2.8-3.9c.4-.1.8.1 1 .5l.9 2c.2.3.1.7-.2 1L9 10z" />
-                </svg>
+                <WhatsAppIcon />
               </span>
               {siteConfig.contact.whatsappDisplay}
             </a>
@@ -307,7 +296,9 @@ function CalEmbed({ fallbackLabel }: { fallbackLabel: string }) {
 
 function ContactForm() {
   const { t } = useLang();
-  const [sent, setSent] = useState(false);
+  const [alert, setAlert] = useState<{ variant: "success" | "error"; message: string } | null>(
+    null,
+  );
 
   const {
     register,
@@ -317,30 +308,37 @@ function ContactForm() {
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", company: "", message: "", website: "" },
-    mode: "onBlur",
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
   const onSubmit = async (data: ContactInput) => {
+    setAlert(null);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
       if (res.status === 429) {
-        toast.error("Too many requests. Please try again in an hour.");
+        setAlert({
+          variant: "error",
+          message: body.error ?? "Too many requests. Please try again in an hour.",
+        });
         return;
       }
       if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? t("contact.error"));
+        setAlert({
+          variant: "error",
+          message: body.error ?? t("contact.error"),
+        });
+        return;
       }
-      setSent(true);
-      toast.success(t("contact.sent"));
       reset();
-    } catch (err) {
-      console.error(err);
-      toast.error(err instanceof Error ? err.message : t("contact.error.network"));
+      setAlert({ variant: "success", message: t("contact.sent") });
+    } catch {
+      setAlert({ variant: "error", message: t("contact.error.network") });
     }
   };
 
@@ -365,6 +363,7 @@ function ContactForm() {
           <Input
             id="contact-name"
             autoComplete="name"
+            required
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "contact-name-err" : undefined}
             placeholder={t("contact.field.name")}
@@ -380,6 +379,7 @@ function ContactForm() {
             id="contact-email"
             type="email"
             autoComplete="email"
+            required
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "contact-email-err" : undefined}
             placeholder={t("contact.field.email")}
@@ -395,7 +395,9 @@ function ContactForm() {
         <Input
           id="contact-company"
           autoComplete="organization"
+          required
           aria-invalid={!!errors.company}
+          aria-describedby={errors.company ? "contact-company-err" : undefined}
           placeholder={t("contact.field.company")}
           {...register("company")}
         />
@@ -408,6 +410,7 @@ function ContactForm() {
         <Textarea
           id="contact-message"
           rows={5}
+          required
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? "contact-message-err" : undefined}
           placeholder={t("contact.field.placeholder")}
@@ -416,14 +419,12 @@ function ContactForm() {
       </Field>
       <button
         type="submit"
-        disabled={isSubmitting || sent}
+        disabled={isSubmitting}
         className={cn(
           "btn-press group bg-primary text-primary-foreground glow-green focus-visible:ring-primary/70 focus-visible:ring-offset-background inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-3.5 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-70 disabled:hover:translate-y-0 sm:w-auto",
         )}
       >
-        {sent ? (
-          t("contact.sent")
-        ) : isSubmitting ? (
+        {isSubmitting ? (
           t("contact.sending")
         ) : (
           <>
@@ -434,6 +435,14 @@ function ContactForm() {
           </>
         )}
       </button>
+
+      {alert ? (
+        <FormAlert
+          variant={alert.variant}
+          message={alert.message}
+          onDismiss={() => setAlert(null)}
+        />
+      ) : null}
     </form>
   );
 }

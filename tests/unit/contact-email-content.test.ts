@@ -43,7 +43,7 @@ describe("contact email content", () => {
     ).toBe(true);
     expect(
       contactFromToMisconfigured(
-        "StackForgeAI Contact Form <contact@send.stackforgeai.africa>",
+        "StackForgeAI Contact Form <contact@stackforgeai.africa>",
         "hello@stackforgeai.africa",
       ),
     ).toBe(false);

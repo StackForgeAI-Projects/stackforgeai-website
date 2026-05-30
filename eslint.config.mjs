@@ -19,6 +19,7 @@ const eslintConfig = [
       "test-results/**",
       "coverage/**",
       "stackforgeai-main/**",
+      "stackfix-landingpage2-main/**",
       "next-env.d.ts",
     ],
   },
