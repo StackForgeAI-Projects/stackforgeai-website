@@ -355,6 +355,102 @@ textarea:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+/* ── Google Translate (hidden widget — language via nav only) ── */
+/* Keep mount in layout (NOT display:none) so Google can inject the combo. */
+.google-translate-root,
+#google_translate_element {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Hide Google top chrome injected outside our mount (e.g. “Select language” bar). */
+body > .skiptranslate:not(.google-translate-root),
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+.skiptranslate iframe,
+.goog-te-menu-frame,
+.goog-te-menu2,
+.goog-te-balloon-frame,
+.goog-tooltip,
+/* Hide Google translate loading UI during page translation. */
+.goog-te-spinner-pos,
+.goog-te-spinner,
+.goog-te-spinner-animation,
+iframe[src*="translate.google"],
+iframe[src*="translate.googleapis"],
+#activity-indicator,
+#progress-bar,
+#progressbar,
+.VIpgJd-ZVi9od-aZ2wEe,
+.VIpgJd-ZVi9od-LgbsSe,
+.VIpgJd-ZVi9od-xl07Ob-lTBxed,
+#goog-gt-tt,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-yAWNEb-L7lbkb,
+.VIpgJd-yAWNEb-L7lbkb div,
+.VIpgJd-yAWNEb-hSRGPd {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Hide gadget chrome; keep widget functional for cookie-driven translation. */
+.goog-te-gadget-icon,
+.goog-te-menu-value,
+.goog-te-menu-value span,
+.goog-te-menu-value img,
+#google_translate_element a,
+.goog-te-gadget-simple a {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.goog-te-combo {
+  position: absolute !important;
+  left: -9999px !important;
+  width: auto !important;
+  height: auto !important;
+  opacity: 0 !important;
+  pointer-events: auto !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+html.translated-ltr,
+html.translated-rtl {
+  margin-top: 0 !important;
+}
+
 /* ── Skip-to-content (a11y) ─────────────────────────────── */
 .skip-link {
   position: absolute;

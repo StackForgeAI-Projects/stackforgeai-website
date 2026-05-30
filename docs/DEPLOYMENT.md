@@ -162,7 +162,7 @@ Send a test email to <check-auth@verifier.port25.com> from `hello@stackforgeai.a
 
 ### 5.2 Verify Resend domain
 
-Resend → Domains → `stackforgeai.africa` → click **Verify**. Once green, Resend accepts `From: …@send.stackforgeai.africa` (see `docs/EMAIL_DELIVERABILITY.md` — **do not** use the same address for From and To).
+Resend → Domains → `stackforgeai.africa` → click **Verify**. Once green, Resend accepts `From: …@stackforgeai.africa` (see `docs/EMAIL_DELIVERABILITY.md` — **do not** use the same address for From and To).
 
 ### 5.3 Contact form inbox placement
 
@@ -179,7 +179,7 @@ Vercel → Project → Settings → **Environment Variables**. Add **all of thes
 | `NEXT_PUBLIC_SITE_URL`               | `https://stackforgeai.africa`                    | `https://staging.stackforgeai.africa` |
 | `NEXT_PUBLIC_SITE_NAME`              | `StackForgeAI`                                | `StackForgeAI Preview`             |
 | `RESEND_API_KEY`                     | from Resend                                   | same                               |
-| `CONTACT_FROM_EMAIL`                 | `StackForgeAI Contact Form <contact@send.stackforgeai.africa>` | same (must differ from To)         |
+| `CONTACT_FROM_EMAIL`                 | `StackForgeAI Contact Form <contact@stackforgeai.africa>` | same (must differ from To)         |
 | `CONTACT_TO_EMAIL`                   | `hello@stackforgeai.africa`                      | dev inbox                          |
 | `BREVO_API_KEY`                      | from Brevo                                    | (optional)                         |
 | `BREVO_LIST_ID`                      | numeric ID                                    | same                               |

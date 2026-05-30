@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/contact-schema";
 import { checkContactRateLimit, getClientIp } from "@/lib/rate-limit";
+import { mapContactSendError } from "@/lib/contact-email-content";
 import { sendContactEmail } from "@/lib/email";
 import { serverEnv } from "@/lib/env";
 
@@ -34,8 +35,23 @@ export async function POST(request: Request) {
     }
   }
 
+  const env = serverEnv();
+  if (env.NODE_ENV === "production" && !env.RESEND_API_KEY) {
+    console.error("[/api/contact] RESEND_API_KEY missing in production");
+    return jsonError(
+      503,
+      "Contact form is temporarily unavailable. Please email hello@stackforgeai.africa directly.",
+    );
+  }
+
   const ip = getClientIp(request);
-  const rate = await checkContactRateLimit(ip);
+  let rate: Awaited<ReturnType<typeof checkContactRateLimit>>;
+  try {
+    rate = await checkContactRateLimit(ip);
+  } catch (err) {
+    console.error("[/api/contact] rate limit check failed", err);
+    rate = { success: true, limit: 5, remaining: 5, reset: Date.now() + 3_600_000 };
+  }
   if (!rate.success) {
     return jsonError(429, "Too many requests. Please try again later.", {
       "Retry-After": Math.ceil((rate.reset - Date.now()) / 1000).toString(),
@@ -65,18 +81,22 @@ export async function POST(request: Request) {
     const result = await sendContactEmail({
       name: parsed.data.name,
       email: parsed.data.email,
-      company: parsed.data.company || undefined,
+      company: parsed.data.company,
       message: parsed.data.message,
+      phone: parsed.data.phone || undefined,
+      source: parsed.data.source,
       ip,
       userAgent: request.headers.get("user-agent") ?? undefined,
     });
     return NextResponse.json({ ok: true, id: result.id });
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     console.error("[/api/contact] send failed", {
-      err: err instanceof Error ? err.message : String(err),
+      err: message,
       env: serverEnv().NODE_ENV,
     });
-    return jsonError(500, "Failed to send message. Please try again.");
+    const mapped = mapContactSendError(err);
+    return jsonError(mapped.status, mapped.message);
   }
 }
 
