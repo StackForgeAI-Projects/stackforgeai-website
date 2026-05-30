@@ -5,7 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Globe, Menu } from "lucide-react";
 import { useStackfixLang, type StackfixLang } from "@/lib/stackfix-i18n";
 import { siteConfig } from "@/lib/site";
-import { siteNavScrolledBarStyle } from "@/lib/site-nav-styles";
+import {
+  siteNavHeaderClass,
+  siteNavLogoLinkClass,
+  siteNavRowClass,
+  siteNavScrolledBarStyle,
+} from "@/lib/site-nav-styles";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { BrandMark } from "./brand-mark";
@@ -40,7 +45,7 @@ export function Nav() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className={siteNavHeaderClass}>
       <div
         className={cn(
           "transition-[padding] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none",
@@ -58,14 +63,11 @@ export function Nav() {
             style={scrolled ? siteNavScrolledBarStyle : undefined}
           >
             <div
-              className={cn(
-                "flex w-full items-center justify-between gap-3 md:gap-4",
-                scrolled && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
-              )}
+              className={cn(siteNavRowClass, scrolled && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8")}
             >
               <Link
                 href="/"
-                className="group flex shrink-0 items-center"
+                className={siteNavLogoLinkClass}
                 aria-label={`${siteConfig.name} home`}
               >
                 <BrandMark className="transition-transform duration-300 select-none group-hover:scale-[1.04]" />
@@ -101,7 +103,7 @@ export function Nav() {
                     aria-haspopup="menu"
                     aria-expanded={langOpen}
                     className={cn(
-                      "focus-visible:ring-brand/60 inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2",
+                      "focus-visible:ring-brand/60 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2 sm:px-3",
                       scrolled
                         ? "border-white/30 text-white hover:bg-white/10"
                         : "border-border text-foreground hover:bg-surface/60",

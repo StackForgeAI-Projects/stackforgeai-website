@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { siteNavLogoImageClass } from "@/lib/site-nav-styles";
+import { cn } from "@/lib/utils";
 
 export function BrandMark({ className = "" }: { className?: string }) {
   return (
@@ -7,7 +9,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
       alt="StackForgeAI"
       width={947}
       height={157}
-      className={`h-5 w-auto object-contain md:h-6 ${className}`}
+      className={cn(siteNavLogoImageClass, className)}
       draggable={false}
       priority
     />

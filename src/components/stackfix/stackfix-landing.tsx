@@ -16,7 +16,7 @@ import { Footer } from "./footer";
 export function StackfixLanding() {
   return (
     <StackfixLangProvider>
-      <div className="stackfix-page min-h-screen">
+      <div className="stackfix-page min-h-screen overflow-x-clip">
         <Nav />
         <main id="main">
           <Hero />

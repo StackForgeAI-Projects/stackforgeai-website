@@ -5,7 +5,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Check, Globe, Menu } from "lucide-react";
 import { siteConfig } from "@/lib/site";
-import { siteNavScrolledBarStyle } from "@/lib/site-nav-styles";
+import {
+  siteNavScrolledBarStyle,
+  siteNavHeaderClass,
+  siteNavLogoImageClass,
+  siteNavLogoLinkClass,
+  siteNavRowClass,
+} from "@/lib/site-nav-styles";
 import { useLang, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -42,7 +48,7 @@ export function Nav() {
   const current = langs.find((l) => l.code === lang)!;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className={siteNavHeaderClass}>
       <div
         className={cn(
           "transition-[padding] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none",
@@ -60,15 +66,12 @@ export function Nav() {
             style={scrolled ? siteNavScrolledBarStyle : undefined}
           >
             <div
-              className={cn(
-                "flex w-full items-center justify-between gap-3 md:gap-4",
-                scrolled && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
-              )}
+              className={cn(siteNavRowClass, scrolled && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8")}
             >
               <Link
                 href="/"
                 scroll
-                className="group flex shrink-0 items-center"
+                className={siteNavLogoLinkClass}
                 aria-label={`${siteConfig.name} home`}
               >
                 <Image
@@ -77,7 +80,7 @@ export function Nav() {
                   width={947}
                   height={157}
                   priority
-                  className="h-5 w-auto object-contain transition-transform duration-300 select-none group-hover:scale-[1.04] md:h-6"
+                  className={cn(siteNavLogoImageClass, "group-hover:scale-[1.04]")}
                   draggable={false}
                 />
               </Link>
