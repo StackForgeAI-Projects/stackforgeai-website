@@ -20,7 +20,7 @@ export const stackfixDict = {
       tag: "A StackForgeAI product · Live in Kigali, Rwanda",
       headlineLine1: "Run your repair shop",
       headlineLine2: "like a tech company.",
-      sub: "StackFix is the all-in-one operating system for Rwanda's repair businesses. Tickets, technicians, invoices and Mobile Money — unified in one fast, secure platform you and your team will actually love using.",
+      sub: "StackFix is the all-in-one operating system for Rwanda's repair businesses. Tickets, technicians, invoices and Mobile Money, unified in one fast, secure platform your team will actually love using.",
       ctaPrimary: "Book a free demo",
       ctaSecondary: "See the product",
       trust: [
@@ -179,12 +179,12 @@ export const stackfixDict = {
     contact: {
       tag: "Contact",
       title: "Ready to take your repair business to the next level?",
-      body: "Book a free 15-minute walkthrough of StackFix. We will go through the platform using your real shop workflow and show you exactly how it fits your business. No pressure. Just a straightforward conversation.",
+      body: "Book a free 15-minute walkthrough of StackFix. We will walk through the platform using your real shop workflow and show you exactly how it fits your business. No pressure, just a straightforward conversation.",
       email: "hello@stackforgeai.africa",
       phone: "+250 799 486 531",
-      whatsapp: "Call/WhatsApp +250 799 486 531",
+      whatsapp: "Call or WhatsApp +250 799 486 531",
       location: "Kigali, Rwanda",
-      formTitle: "Book a Demo",
+      formTitle: "Book a demo",
       formSub: "Fill in the form below and we will get back to you within 24 hours.",
       fields: {
         name: "Full name",
@@ -193,7 +193,11 @@ export const stackfixDict = {
         phone: "Phone or WhatsApp",
         message: "Tell us about your workshop",
       },
-      submit: "Send Message",
+      submit: "Send message",
+      formSent: "Message sent ✓",
+      formSending: "Sending…",
+      formError: "Something went wrong. Please try again.",
+      formNetworkError: "Network error. Please check your connection.",
     },
     footer: {
       tagline: "The repair management platform built for Rwanda's businesses. Built in Kigali by",
@@ -220,7 +224,7 @@ export const stackfixDict = {
       tag: "Igicuruzwa cya StackForgeAI · Kibarizwa i Kigali, u Rwanda",
       headlineLine1: "Yobora atelier yawe yo gusana",
       headlineLine2: "nk'ikigo cy'ikoranabuhanga.",
-      sub: "StackFix ni sisitemu yose mu rimwe y'ubucuruzi bwo gusana mu Rwanda. Tike, abakanishi, fagitire na Mobile Money — byose mu rubuga rwihuse, rwizewe rworoshye gukoresha wowe n'itsinda ryawe.",
+      sub: "StackFix ni sisitemu yose mu rimwe y'ubucuruzi bwo gusana mu Rwanda. Tike, abakanishi, fagitire na Mobile Money, byose mu rubuga rwihuse, rwizewe rworoshye gukoresha wowe n'itsinda ryawe.",
       ctaPrimary: "Saba demo y'ubuntu",
       ctaSecondary: "Reba igicuruzwa",
       trust: [
@@ -380,12 +384,12 @@ export const stackfixDict = {
     contact: {
       tag: "Twandikire",
       title: "Witeguye gushyira ubucuruzi bwawe bwo gusana ku rwego rukurikira?",
-      body: "Saba demo y'ubuntu y'iminota 15 kuri StackFix. Tuzanyura kuri urubuga dukoresheje uburyo nyabwo bw'atelier yawe maze tukwereke neza uko bikwiranye n'ubucuruzi bwawe. Nta gahato. Ikiganiro cyoroshye.",
+      body: "Saba demo y'ubuntu y'iminota 15 kuri StackFix. Tuzanyura kuri urubuga dukoresheje uburyo nyabwo bw'atelier yawe maze tukwereke neza uko bikwiranye n'ubucuruzi bwawe. Nta gahato, ikiganiro cyoroshye.",
       email: "hello@stackforgeai.africa",
       phone: "+250 799 486 531",
-      whatsapp: "Hamagara/WhatsApp +250 799 486 531",
+      whatsapp: "Hamagara cyangwa WhatsApp +250 799 486 531",
       location: "Kigali, u Rwanda",
-      formTitle: "Saba Demo",
+      formTitle: "Saba demo",
       formSub: "Uzuza ifishi ikurikira maze tuzakugarukira mu masaha 24.",
       fields: {
         name: "Amazina yose",
@@ -394,7 +398,11 @@ export const stackfixDict = {
         phone: "Telefone cyangwa WhatsApp",
         message: "Tubwire kuri atelier yawe",
       },
-      submit: "Ohereza Ubutumwa",
+      submit: "Ohereza ubutumwa",
+      formSent: "Ubutumwa bwoherejwe ✓",
+      formSending: "Birimo koherezwa…",
+      formError: "Habaye ikosa. Ongera ugerageze.",
+      formNetworkError: "Ikibazo cya interineti. Reba uko wifungiye.",
     },
     footer: {
       tagline:
@@ -422,7 +430,7 @@ export const stackfixDict = {
       tag: "Un produit StackForgeAI · Disponible à Kigali, Rwanda",
       headlineLine1: "Gérez votre atelier de réparation",
       headlineLine2: "comme une tech company.",
-      sub: "StackFix est le système d'exploitation tout-en-un pour les entreprises de réparation au Rwanda. Tickets, techniciens, factures et Mobile Money — unifiés sur une plateforme rapide, sécurisée et agréable à utiliser.",
+      sub: "StackFix est le système d'exploitation tout-en-un pour les entreprises de réparation au Rwanda. Tickets, techniciens, factures et Mobile Money, unifiés sur une plateforme rapide, sécurisée et agréable à utiliser.",
       ctaPrimary: "Réserver une démo gratuite",
       ctaSecondary: "Voir le produit",
       trust: [
@@ -582,10 +590,10 @@ export const stackfixDict = {
     contact: {
       tag: "Contact",
       title: "Prêt à faire passer votre atelier au niveau supérieur ?",
-      body: "Réservez une démo gratuite de 15 minutes adaptée à votre flux de travail. Sans pression, juste une conversation simple.",
+      body: "Réservez une démo gratuite de 15 minutes sur StackFix. Nous parcourons la plateforme avec votre flux d'atelier réel et vous montrons comment elle s'intègre à votre activité. Sans pression, juste une conversation simple.",
       email: "hello@stackforgeai.africa",
       phone: "+250 799 486 531",
-      whatsapp: "Appel/WhatsApp +250 799 486 531",
+      whatsapp: "Appel ou WhatsApp +250 799 486 531",
       location: "Kigali, Rwanda",
       formTitle: "Réserver une démo",
       formSub: "Remplissez le formulaire et nous vous répondons sous 24 heures.",
@@ -597,6 +605,10 @@ export const stackfixDict = {
         message: "Parlez-nous de votre atelier",
       },
       submit: "Envoyer le message",
+      formSent: "Message envoyé ✓",
+      formSending: "Envoi en cours…",
+      formError: "Une erreur s'est produite. Veuillez réessayer.",
+      formNetworkError: "Erreur réseau. Vérifiez votre connexion.",
     },
     footer: {
       tagline:

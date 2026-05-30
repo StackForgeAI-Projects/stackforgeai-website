@@ -14,6 +14,7 @@ ALLOWED_PUSH_USER="stackforgeai"
 
 echo "→ Applying branch protection on ${REPO} (main + develop)…"
 echo "  Push/merge restricted to: ${ALLOWED_PUSH_USER}"
+echo "  Solo maintainer: @${ALLOWED_PUSH_USER} can merge own PRs (bypass review)."
 
 apply_protection() {
   local branch="$1"
@@ -26,12 +27,17 @@ apply_protection() {
       "Build"
     ]
   },
-  "enforce_admins": true,
+  "enforce_admins": false,
   "required_pull_request_reviews": {
     "dismiss_stale_reviews": true,
-    "require_code_owner_reviews": true,
-    "required_approving_review_count": 1,
-    "require_last_push_approval": true
+    "require_code_owner_reviews": false,
+    "required_approving_review_count": 0,
+    "require_last_push_approval": false,
+    "bypass_pull_request_allowances": {
+      "users": ["${ALLOWED_PUSH_USER}"],
+      "teams": [],
+      "apps": []
+    }
   },
   "restrictions": {
     "users": ["${ALLOWED_PUSH_USER}"],

@@ -1,9 +1,11 @@
 "use client";
 
-import type { ComponentType } from "react";
+import { useState, type ComponentType, type FormEvent } from "react";
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
+import { FormAlert } from "@/components/ui/form-alert";
 import { useStackfixLang } from "@/lib/stackfix-i18n";
+import { buildStackfixContactMessage, submitContactForm } from "@/lib/submit-contact-form";
 import { Field } from "./field";
 
 function ContactLink({
@@ -32,6 +34,47 @@ function ContactLink({
 
 export function Contact() {
   const { t } = useStackfixLang();
+  const [alert, setAlert] = useState<{ variant: "success" | "error"; message: string } | null>(
+    null,
+  );
+  const [submitting, setSubmitting] = useState(false);
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setAlert(null);
+    setSubmitting(true);
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const message = buildStackfixContactMessage({
+      phone: data.get("phone")?.toString(),
+      message: data.get("message")?.toString(),
+    });
+
+    const result = await submitContactForm(
+      {
+        name: String(data.get("name") ?? ""),
+        email: String(data.get("email") ?? ""),
+        company: String(data.get("business") ?? ""),
+        message,
+        website: "",
+        source: "stackfix",
+        phone: data.get("phone")?.toString() || undefined,
+      },
+      t.contact.formError,
+      t.contact.formNetworkError,
+    );
+
+    setSubmitting(false);
+
+    if (!result.ok) {
+      setAlert({ variant: "error", message: result.message });
+      return;
+    }
+
+    form.reset();
+    setAlert({ variant: "success", message: t.contact.formSent });
+  };
 
   return (
     <section id="contact" className="bg-surface/40 border-border/60 border-t py-24 md:py-32">
@@ -56,21 +99,22 @@ export function Contact() {
         </div>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const data = new FormData(e.currentTarget);
-            const subject = encodeURIComponent(
-              `StackFix demo request — ${data.get("business") || data.get("name")}`,
-            );
-            const body = encodeURIComponent(
-              `Name: ${data.get("name")}\nBusiness: ${data.get("business")}\nEmail: ${data.get("email")}\nPhone: ${data.get("phone")}\n\n${data.get("message")}`,
-            );
-            window.location.href = `mailto:hello@stackforgeai.africa?subject=${subject}&body=${body}`;
-          }}
-          className="glass rounded-2xl p-7 md:p-8"
+          noValidate
+          onSubmit={onSubmit}
+          className="glass relative rounded-2xl p-7 md:p-8"
+          aria-label="StackFix demo request form"
         >
           <h3 className="text-xl font-semibold">{t.contact.formTitle}</h3>
           <p className="text-muted-foreground mt-1 text-sm">{t.contact.formSub}</p>
+          <input
+            type="text"
+            name="website"
+            autoComplete="off"
+            tabIndex={-1}
+            aria-hidden
+            defaultValue=""
+            className="absolute -left-[9999px] h-0 w-0 opacity-0"
+          />
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <Field name="name" label={t.contact.fields.name} placeholder="Kevin Ganza" required />
             <Field
@@ -98,10 +142,20 @@ export function Contact() {
           </div>
           <button
             type="submit"
-            className="btn-brand mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
+            disabled={submitting}
+            className="btn-brand mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold disabled:opacity-70"
           >
-            {t.contact.submit} <ArrowRight className="h-4 w-4" />
+            {submitting ? t.contact.formSending : t.contact.submit}{" "}
+            {!submitting ? <ArrowRight className="h-4 w-4" /> : null}
           </button>
+
+          {alert ? (
+            <FormAlert
+              variant={alert.variant}
+              message={alert.message}
+              onDismiss={() => setAlert(null)}
+            />
+          ) : null}
         </form>
       </div>
     </section>

@@ -74,6 +74,27 @@ test.describe("StackFix landing page", () => {
     await expect(tryLink).toHaveAttribute("href", "/stackfix");
   });
 
+  test("contact form submits to API and shows success alert", async ({ page }) => {
+    await page.route("**/api/contact", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true, id: "test-id" }),
+      });
+    });
+
+    await page.goto("/stackfix#contact");
+    await page
+      .getByLabel("StackFix demo request form")
+      .getByPlaceholder("Kevin Ganza")
+      .fill("Kevin Ganza");
+    await page.getByPlaceholder("FixHub Nyarugenge").fill("FixHub Nyarugenge");
+    await page.getByPlaceholder("you@shop.rw").fill("demo@shop.rw");
+    await page.getByRole("button", { name: /Send message/i }).click();
+
+    await expect(page.getByText("Message sent ✓")).toBeVisible();
+  });
+
   test("no critical accessibility violations on stackfix", async ({ page }) => {
     await page.goto("/stackfix");
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
