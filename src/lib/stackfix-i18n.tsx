@@ -15,6 +15,8 @@ export const stackfixDict = {
         { href: "#contact", label: "Contact" },
       ],
       cta: "Book a Free Demo",
+      menuOpen: "Open menu",
+      menuClose: "Close menu",
     },
     hero: {
       tag: "A StackForgeAI product · Live in Kigali, Rwanda",
@@ -219,6 +221,8 @@ export const stackfixDict = {
         { href: "#contact", label: "Twandikire" },
       ],
       cta: "Saba Demo y'Ubuntu",
+      menuOpen: "Fungura menu",
+      menuClose: "Funga menu",
     },
     hero: {
       tag: "Igicuruzwa cya StackForgeAI · Kibarizwa i Kigali, u Rwanda",
@@ -425,6 +429,8 @@ export const stackfixDict = {
         { href: "#contact", label: "Contact" },
       ],
       cta: "Réserver une démo",
+      menuOpen: "Ouvrir le menu",
+      menuClose: "Fermer le menu",
     },
     hero: {
       tag: "Un produit StackForgeAI · Disponible à Kigali, Rwanda",

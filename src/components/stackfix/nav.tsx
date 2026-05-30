@@ -1,84 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type CSSProperties } from "react";
-import { ArrowRight, Globe } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Check, Globe, Menu } from "lucide-react";
 import { useStackfixLang, type StackfixLang } from "@/lib/stackfix-i18n";
 import { siteConfig } from "@/lib/site";
+import { siteNavScrolledBarStyle } from "@/lib/site-nav-styles";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { BrandMark } from "./brand-mark";
 
-const scrolledBarStyle: CSSProperties = {
-  background: "linear-gradient(135deg, oklch(0.32 0.10 150 / 0.94), oklch(0.26 0.08 155 / 0.94))",
-  backdropFilter: "blur(20px) saturate(160%)",
-  WebkitBackdropFilter: "blur(20px) saturate(160%)",
-};
-
-function LangSwitch({ scrolled }: { scrolled: boolean }) {
-  const { lang, setLang } = useStackfixLang();
-  const labels: Record<StackfixLang, string> = { en: "English", fr: "Français", rw: "Kinyarwanda" };
-  const short: Record<StackfixLang, string> = { en: "EN", fr: "FR", rw: "RW" };
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="relative hidden md:block">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        onBlur={() => setTimeout(() => setOpen(false), 120)}
-        aria-label="Change language"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-xs transition-colors",
-          scrolled
-            ? "border-white/30 text-white hover:bg-white/10"
-            : "border-border/60 text-muted-foreground hover:text-foreground",
-        )}
-      >
-        <Globe className="h-3.5 w-3.5" />
-        {short[lang]}
-      </button>
-      {open && (
-        <ul
-          role="listbox"
-          className="glass absolute right-0 z-50 mt-2 min-w-[160px] rounded-xl p-1 text-sm"
-        >
-          {(Object.keys(labels) as StackfixLang[]).map((l) => (
-            <li key={l}>
-              <button
-                role="option"
-                aria-selected={lang === l}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  setLang(l);
-                  setOpen(false);
-                }}
-                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors ${
-                  lang === l
-                    ? "bg-brand/15 text-foreground"
-                    : "text-muted-foreground hover:bg-surface hover:text-foreground"
-                }`}
-              >
-                <span>{labels[l]}</span>
-                <span className="text-muted-foreground text-xs">{short[l]}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
+const langs: { code: StackfixLang; label: string; full: string }[] = [
+  { code: "en", label: "EN", full: "English" },
+  { code: "fr", label: "FR", full: "Français" },
+  { code: "rw", label: "RW", full: "Kinyarwanda" },
+];
 
 export function Nav() {
-  const { t } = useStackfixLang();
+  const { lang, setLang, t } = useStackfixLang();
   const [scrolled, setScrolled] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
+  const current = langs.find((l) => l.code === lang)!;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!langMenuRef.current?.contains(e.target as Node)) setLangOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
   return (
@@ -90,14 +48,14 @@ export function Nav() {
         )}
       >
         <div className={cn(!scrolled && "mx-auto max-w-7xl")}>
-          <nav
+          <div
             className={cn(
-              "flex items-center justify-between transition-[margin,border-radius,box-shadow,padding] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none",
+              "transition-[margin,border-radius,box-shadow,padding] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none",
               scrolled
                 ? "border-brand/50 w-full rounded-t-none rounded-b-3xl border-b px-0 py-3 shadow-[0_16px_48px_-20px_oklch(0_0_0/0.55)]"
-                : "glass rounded-full py-2 pr-2 pl-5",
+                : "glass rounded-full py-2 pr-2 pl-4 shadow-none sm:pl-5",
             )}
-            style={scrolled ? scrolledBarStyle : undefined}
+            style={scrolled ? siteNavScrolledBarStyle : undefined}
           >
             <div
               className={cn(
@@ -113,42 +71,127 @@ export function Nav() {
                 <BrandMark className="transition-transform duration-300 select-none group-hover:scale-[1.04]" />
               </Link>
 
-              <ul
+              <nav
                 className={cn(
-                  "hidden items-center gap-7 text-sm md:flex",
+                  "hidden items-center gap-7 text-sm transition-colors md:flex",
                   scrolled ? "text-white/85" : "text-muted-foreground",
                 )}
+                aria-label="Primary"
               >
                 {t.nav.links.map((l) => (
-                  <li key={l.href}>
-                    <a
-                      href={l.href}
-                      className={cn(
-                        "transition-colors",
-                        scrolled ? "hover:text-white" : "hover:text-foreground",
-                      )}
-                    >
-                      {l.label}
-                    </a>
-                  </li>
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    className={cn(
+                      "transition-colors",
+                      scrolled ? "hover:text-white" : "hover:text-foreground",
+                    )}
+                  >
+                    {l.label}
+                  </a>
                 ))}
-              </ul>
+              </nav>
 
               <div className="flex shrink-0 items-center gap-2">
-                <LangSwitch scrolled={scrolled} />
+                <div ref={langMenuRef} className="notranslate relative" translate="no" lang="en">
+                  <button
+                    type="button"
+                    onClick={() => setLangOpen((o) => !o)}
+                    aria-label="Change language"
+                    aria-haspopup="menu"
+                    aria-expanded={langOpen}
+                    className={cn(
+                      "focus-visible:ring-brand/60 inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2",
+                      scrolled
+                        ? "border-white/30 text-white hover:bg-white/10"
+                        : "border-border text-foreground hover:bg-surface/60",
+                    )}
+                  >
+                    <Globe className="h-4 w-4" aria-hidden />
+                    <span className="font-mono tracking-wider">{current.label}</span>
+                  </button>
+                  {langOpen && (
+                    <div
+                      role="menu"
+                      aria-label="Language"
+                      className="border-border bg-surface/95 absolute top-full right-0 z-[60] mt-2 w-44 rounded-2xl border p-1.5 shadow-xl backdrop-blur-md"
+                    >
+                      {langs.map((l) => (
+                        <button
+                          key={l.code}
+                          type="button"
+                          role="menuitemradio"
+                          aria-checked={lang === l.code}
+                          onClick={() => {
+                            setLang(l.code);
+                            setLangOpen(false);
+                          }}
+                          className="text-foreground hover:bg-brand/15 focus-visible:bg-brand/15 flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-sm transition focus:outline-none"
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="text-brand font-mono text-xs">{l.label}</span>
+                            <span lang="en">{l.full}</span>
+                          </span>
+                          {lang === l.code && <Check className="text-brand h-4 w-4" aria-hidden />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <a
                   href="#contact"
                   className={cn(
-                    "btn-brand inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold",
+                    "btn-brand focus-visible:ring-brand/60 hidden items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 sm:inline-flex",
                     scrolled &&
                       "bg-background text-foreground hover:bg-brand hover:text-brand-foreground shadow-[0_0_30px_-6px_oklch(0_0_0/0.5)]",
                   )}
                 >
                   {t.nav.cta} <ArrowRight className="h-4 w-4" />
                 </a>
+
+                <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+                  <SheetTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label={t.nav.menuOpen}
+                      className={cn(
+                        "focus-visible:ring-brand/60 inline-flex items-center justify-center rounded-full border p-2 transition focus:outline-none focus-visible:ring-2 md:hidden",
+                        scrolled
+                          ? "border-white/30 text-white hover:bg-white/10"
+                          : "border-border text-foreground hover:bg-surface/60",
+                      )}
+                    >
+                      <Menu className="h-5 w-5" />
+                    </button>
+                  </SheetTrigger>
+                  <SheetContent>
+                    <SheetTitle>{siteConfig.name}</SheetTitle>
+                    <nav className="mt-10 flex flex-col gap-1" aria-label="Mobile primary">
+                      {t.nav.links.map((l) => (
+                        <SheetClose asChild key={l.href}>
+                          <a
+                            href={l.href}
+                            className="text-foreground hover:bg-brand/10 hover:text-brand block rounded-xl px-4 py-3 text-base transition"
+                          >
+                            {l.label}
+                          </a>
+                        </SheetClose>
+                      ))}
+                    </nav>
+                    <SheetClose asChild>
+                      <a
+                        href="#contact"
+                        className="btn-brand mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
+                      >
+                        {t.nav.cta} <ArrowRight className="h-4 w-4" />
+                      </a>
+                    </SheetClose>
+                  </SheetContent>
+                </Sheet>
               </div>
             </div>
-          </nav>
+          </div>
         </div>
       </div>
     </header>

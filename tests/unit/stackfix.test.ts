@@ -62,6 +62,13 @@ describe("stackfix landing config", () => {
     }
   });
 
+  it("includes mobile menu labels in every locale", () => {
+    for (const lang of Object.keys(stackfixDict) as Array<keyof typeof stackfixDict>) {
+      expect(stackfixDict[lang].nav.menuOpen).toBeTruthy();
+      expect(stackfixDict[lang].nav.menuClose).toBeTruthy();
+    }
+  });
+
   it("uses no em dash in user-facing stackfix copy", () => {
     for (const lang of Object.values(stackfixDict)) {
       expect(JSON.stringify(lang)).not.toContain("—");
