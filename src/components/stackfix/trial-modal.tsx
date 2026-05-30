@@ -24,10 +24,10 @@ export function TrialModal({
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const subject = encodeURIComponent(
-      `StackFix free trial signup — ${data.get("business") || data.get("name")}`,
+      `StackFix free trial signup | ${data.get("business") || data.get("name")}`,
     );
     const body = encodeURIComponent(
-      `New 14-day free trial signup\n\nName: ${data.get("name")}\nBusiness: ${data.get("business")}\nEmail: ${data.get("email")}\nPhone: ${data.get("phone") || "—"}\n\nPlease provision a trial account and send credentials.`,
+      `New 14-day free trial signup\n\nName: ${data.get("name")}\nBusiness: ${data.get("business")}\nEmail: ${data.get("email")}\nPhone: ${data.get("phone") || "n/a"}\n\nPlease provision a trial account and send credentials.`,
     );
     window.location.href = `mailto:hello@stackforgeai.africa?subject=${subject}&body=${body}`;
     setSubmitted(true);

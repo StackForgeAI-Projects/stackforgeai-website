@@ -2,22 +2,22 @@ import { seoKeywords } from "@/lib/seo-keywords";
 
 export const siteConfig = {
   name: "StackForgeAI",
-  fullName: "StackForgeAI — Intelligent Software for Africa's Institutions & European Partners",
+  fullName: "StackForgeAI | Intelligent Software for Africa's Institutions & European Partners",
   domain: "stackforgeai.africa",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://stackforgeai.africa",
   description:
-    "StackForgeAI builds AI-powered software for African schools, universities, workshops, businesses, and governments — and partners with European enterprises on custom web, mobile, and automation systems from Kigali, Rwanda.",
+    "StackForgeAI builds AI-powered software for African schools, universities, workshops, businesses, and governments, and partners with European enterprises on custom web, mobile, and automation systems from Kigali, Rwanda.",
   keywords: seoKeywords,
   seo: {
     home: {
-      title: "StackForgeAI | AI & Software for Africa — StackFix, StackEDU | Europe Partners",
+      title: "StackForgeAI | AI & Software for Africa | StackFix, StackEDU | Europe Partners",
       description:
         "Africa-first AI and software company in Kigali: StackFix repair management, StackEDU for universities, Rwanda Directory, plus custom development for schools, workshops, SMEs, and European enterprise partners.",
     },
     stackfix: {
-      title: "StackFix | Repair App in Rwanda & Africa — Workshop & Ticket Management",
+      title: "StackFix | Repair App in Rwanda & Africa | Workshop & Ticket Management",
       description:
-        "StackFix is the repair app built for Rwanda and Africa. Manage repair tickets, technicians, invoices and Mobile Money payments from one platform — for electronics shops, service centers and workshops in Kigali and across the continent.",
+        "StackFix is the repair app built for Rwanda and Africa. Manage repair tickets, technicians, invoices and Mobile Money payments from one platform, for electronics shops, service centers and workshops in Kigali and across the continent.",
     },
   },
   author: {

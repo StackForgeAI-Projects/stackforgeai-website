@@ -17,7 +17,7 @@ const PRODUCT_DEFINITIONS = [
     id: "stackfix",
     name: "StackFix",
     description:
-      "Repair and field-service management — track service requests, assign technicians, and improve operational efficiency.",
+      "Repair and field-service management: track service requests, assign technicians, and improve operational efficiency.",
     applicationCategory: "BusinessApplication",
     url: absoluteUrl(siteConfig.links.stackfix),
     audience: ["Businesses", "Workshops", "Field service teams"],
@@ -26,7 +26,7 @@ const PRODUCT_DEFINITIONS = [
     id: "stackedu",
     name: "StackEDU",
     description:
-      "Centralized education management for tertiary institutions — student data, academic records, and administrative workflows.",
+      "Centralized education management for tertiary institutions: student data, academic records, and administrative workflows.",
     applicationCategory: "EducationalApplication",
     url: siteConfig.links.stackedu,
     audience: ["Universities", "Colleges", "Training institutes", "Schools"],
@@ -73,7 +73,7 @@ const FAQ_ENTRIES = [
   {
     question: "Who does StackForgeAI serve?",
     answer:
-      "Schools, universities, workshops, SMEs, enterprises, and government agencies across Africa — with European organizations as a primary partner audience for custom delivery and digital transformation.",
+      "Schools, universities, workshops, SMEs, enterprises, and government agencies across Africa, with European organizations as a primary partner audience for custom delivery and digital transformation.",
   },
   {
     question: "Where is StackForgeAI located?",
@@ -311,7 +311,7 @@ export function stackfixStructuredDataGraph(): Record<string, unknown> {
     {
       question: "Is StackFix a repair app in Rwanda?",
       answer:
-        "Yes. StackFix is built for repair shops in Rwanda — including Kigali electronics workshops, phone repair stores, and authorized service centers — with RWF pricing, MoMo USSD support, and local language options.",
+        "Yes. StackFix is built for repair shops in Rwanda, including Kigali electronics workshops, phone repair stores, and authorized service centers, with RWF pricing, MoMo USSD support, and local language options.",
     },
     {
       question: "Does StackFix work as a repair app in Africa?",

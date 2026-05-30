@@ -6,6 +6,7 @@ import {
   buildContactPlainText,
   contactFromToMisconfigured,
   formatContactReplyTo,
+  resolveContactFromEmail,
   type SendContactArgs,
 } from "@/lib/contact-email-content";
 
@@ -64,13 +65,39 @@ export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: st
   }
 
   const safeName = args.name.trim() || "Website visitor";
-  const subject = `[Website Contact] Enquiry from ${safeName}`;
+  const subject =
+    args.source === "stackfix"
+      ? `[StackFix Demo] Enquiry from ${safeName}`
+      : `[Website Contact] Enquiry from ${safeName}`;
 
-  const result = await resend.emails.send({
-    from: env.CONTACT_FROM_EMAIL,
+  const from = resolveContactFromEmail(env.CONTACT_FROM_EMAIL, env.CONTACT_TO_EMAIL);
+  if (from !== env.CONTACT_FROM_EMAIL) {
+    console.warn("[email] Using verified sender override", {
+      configured: env.CONTACT_FROM_EMAIL,
+      resolved: from,
+    });
+  }
+
+  const payload = {
+    from,
     to: env.CONTACT_TO_EMAIL,
     replyTo: formatContactReplyTo(args.name, args.email),
     subject,
+    text: buildContactPlainText(args),
+    tags: [
+      {
+        name: "category",
+        value: args.source === "stackfix" ? "stackfix-demo" : "contact-form",
+      },
+    ],
+    headers: {
+      "X-Entity-Ref-ID": `contact-${Date.now()}`,
+      "Auto-Submitted": "auto-generated",
+    },
+  };
+
+  const withReact = await resend.emails.send({
+    ...payload,
     react: ContactNotificationEmail({
       name: args.name,
       email: args.email,
@@ -79,16 +106,16 @@ export async function sendContactEmail(args: SendContactArgs): Promise<{ id?: st
       ip: args.ip,
       userAgent: args.userAgent,
     }),
-    text: buildContactPlainText(args),
-    tags: [{ name: "category", value: "contact-form" }],
-    headers: {
-      "X-Entity-Ref-ID": `contact-${Date.now()}`,
-      "Auto-Submitted": "auto-generated",
-    },
   });
 
-  if (result.error) {
-    throw new Error(`Resend send failed: ${result.error.message}`);
+  if (withReact.error) {
+    console.error("[email] HTML send failed, retrying text-only", withReact.error.message);
+    const textOnly = await resend.emails.send(payload);
+    if (textOnly.error) {
+      throw new Error(`Resend send failed: ${textOnly.error.message}`);
+    }
+    return { id: textOnly.data?.id };
   }
-  return { id: result.data?.id };
+
+  return { id: withReact.data?.id };
 }
