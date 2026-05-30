@@ -39,6 +39,9 @@
       transparent 60%
     );
   background-attachment: fixed;
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
 }
 
 .stackfix-page .grid-bg {

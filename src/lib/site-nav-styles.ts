@@ -6,3 +6,16 @@ export const siteNavScrolledBarStyle: CSSProperties = {
   backdropFilter: "blur(20px) saturate(160%)",
   WebkitBackdropFilter: "blur(20px) saturate(160%)",
 };
+
+/** Fixed header shell — clips horizontal bleed on narrow viewports. */
+export const siteNavHeaderClass = "fixed inset-x-0 top-0 z-50 w-full max-w-[100vw] overflow-x-clip";
+
+/** Inner nav row — allows logo/actions to shrink without forcing page scroll. */
+export const siteNavRowClass =
+  "flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3 md:gap-4";
+
+/** Logo sizing shared by homepage and StackFix headers. */
+export const siteNavLogoImageClass =
+  "h-5 w-auto max-w-[7.5rem] object-contain sm:max-w-none md:h-6";
+
+export const siteNavLogoLinkClass = "group flex min-w-0 shrink items-center";

@@ -9,7 +9,7 @@ export function Hero() {
   const trustIcons: LucideIcon[] = [ShieldCheck, Clock, Sparkles, Wallet];
 
   return (
-    <section id="top" className="relative pt-36 pb-20 md:pt-44 md:pb-28">
+    <section id="top" className="relative overflow-x-clip pt-36 pb-20 md:pt-44 md:pb-28">
       <div className="grid-bg pointer-events-none absolute inset-0" />
       <div className="relative mx-auto max-w-6xl px-6 text-center">
         <div className="glass text-muted-foreground fade-up inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs">

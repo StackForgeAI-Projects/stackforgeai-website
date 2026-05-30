@@ -77,6 +77,17 @@ test.describe("StackFix landing page", () => {
     await expect(page).toHaveURL(/#pricing$/);
   });
 
+  test("does not scroll horizontally on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/stackfix");
+    await page.waitForLoadState("networkidle");
+    const overflows = await page.evaluate(() => {
+      const root = document.documentElement;
+      return root.scrollWidth > root.clientWidth + 1;
+    });
+    expect(overflows).toBe(false);
+  });
+
   test("trial modal opens from starter plan", async ({ page }) => {
     await page.goto("/stackfix#pricing");
     await page.getByRole("button", { name: /Start free trial/i }).click();
