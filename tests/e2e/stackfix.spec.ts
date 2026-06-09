@@ -48,6 +48,19 @@ test.describe("StackFix landing page", () => {
     await expect(badge).toHaveCSS("white-space", "nowrap");
   });
 
+  test("keeps billing cycle tabs on one line", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/stackfix#pricing");
+    const yearlyTab = page.getByRole("button", { name: /Yearly/i });
+    await expect(yearlyTab).toBeVisible();
+    await expect(yearlyTab).toHaveCSS("white-space", "nowrap");
+    const box = await yearlyTab.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      expect(box.height).toBeLessThan(48);
+    }
+  });
+
   test("anchor nav scrolls to pricing", async ({ page }) => {
     await page.goto("/stackfix");
     await page.getByRole("link", { name: "Pricing" }).first().click();
