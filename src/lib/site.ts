@@ -6,18 +6,33 @@ export const siteConfig = {
   domain: "stackforgeai.africa",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://stackforgeai.africa",
   description:
-    "StackForgeAI builds AI-powered software for African schools, universities, workshops, businesses, and governments, and partners with European enterprises on custom web, mobile, and automation systems from Kigali, Rwanda.",
+    "StackForgeAI builds AI-powered software for African schools, universities, workshops, businesses, and governments — StackFix repair management, the StackEDU learning management system (LMS), Rwanda Directory, and StackForgeNext free tech training for students — and partners with European enterprises on custom web, mobile, and automation systems from Kigali, Rwanda.",
   keywords: seoKeywords,
   seo: {
     home: {
-      title: "StackForgeAI | AI & Software for Africa | StackFix, StackEDU | Europe Partners",
+      title: "StackForgeAI | AI & Software for Africa | StackFix, StackEDU LMS, StackForgeNext",
       description:
-        "Africa-first AI and software company in Kigali: StackFix repair management, StackEDU for universities, Rwanda Directory, plus custom development for schools, workshops, SMEs, and European enterprise partners.",
+        "Africa-first AI and software company in Kigali: StackFix repair management, the StackEDU LMS for universities, StackForgeNext free tech training for students, Rwanda Directory, plus custom web, mobile, and AI development for institutions and European enterprise partners.",
     },
     stackfix: {
       title: "StackFix | Repair App in Rwanda & Africa | Workshop & Ticket Management",
       description:
         "StackFix is the repair app built for Rwanda and Africa. Manage repair tickets, technicians, invoices and Mobile Money payments from one platform, for electronics shops, service centers and workshops in Kigali and across the continent.",
+    },
+    stackedu: {
+      title: "StackEDU | LMS & Student Portal for Universities in Rwanda & Africa",
+      description:
+        "StackEDU is the learning management system and student portal for higher institutions in Rwanda and Africa. Manage courses, enrollment, grading, academic records, and online learning for universities, colleges, and TVET institutes from one educational portal.",
+    },
+    stackforgenext: {
+      title: "StackForgeNext | Free Tech Training for African Students | StackForgeAI",
+      description:
+        "StackForgeNext is StackForgeAI's free software engineering and AI training program for African students. Learn to code, build real products, and grow tech careers through scholarships, bootcamps, and mentorship across Rwanda and Africa.",
+    },
+    training: {
+      title: "Free Tech Training & Scholarships for African Students | StackForgeAI",
+      description:
+        "Free, scholarship-backed technology training for African students: software engineering, AI, and digital skills. StackForgeAI invests in the next generation of African tech talent from Kigali, Rwanda.",
     },
   },
   author: {

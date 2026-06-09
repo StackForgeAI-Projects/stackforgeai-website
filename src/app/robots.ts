@@ -3,15 +3,42 @@ import { siteConfig } from "@/lib/site";
 
 /** Allow search engines and AI crawlers; block API and build artifacts only. */
 const AI_CRAWLERS = [
+  // OpenAI / ChatGPT
   "GPTBot",
   "ChatGPT-User",
   "OAI-SearchBot",
+  // Anthropic / Claude
   "ClaudeBot",
+  "Claude-Web",
   "anthropic-ai",
+  // Google (Gemini / Vertex)
   "Google-Extended",
-  "PerplexityBot",
+  "GoogleOther",
+  // Microsoft / Bing Copilot
+  "Bingbot",
+  // Apple Intelligence
+  "Applebot",
   "Applebot-Extended",
+  // Perplexity
+  "PerplexityBot",
+  "Perplexity-User",
+  // Meta AI
+  "meta-externalagent",
+  "FacebookBot",
+  // Amazon
+  "Amazonbot",
+  // DuckDuckGo AI
+  "DuckAssistBot",
+  // You.com
+  "YouBot",
+  // Cohere
   "cohere-ai",
+  // Common Crawl (feeds many LLM training sets and AI search engines)
+  "CCBot",
+  // ByteDance / Doubao
+  "Bytespider",
+  // Diffbot knowledge graph
+  "Diffbot",
 ] as const;
 
 export default function robots(): MetadataRoute.Robots {

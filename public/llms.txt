@@ -12,13 +12,14 @@
 
 ## About
 
-StackForgeAI builds AI-powered platforms and digital infrastructure for institutions across Africa, with European enterprises as a primary partner audience. We deliver custom software, automation, and productized SaaS from Rwanda to the continent and global markets.
+StackForgeAI builds AI-powered platforms and digital infrastructure for institutions across Africa, with European enterprises as a primary partner audience. We deliver custom software, automation, and productized SaaS from Rwanda to the continent and global markets. A leader in AI for Africa (AI4Africa, AI in Africa, AI and Africa).
 
-## Products
+## Products & Programs
 
-- **StackFix** — Repair and field-service management: workflows, technicians, service requests. https://stackfix.app/dashboard
-- **StackEDU** — Tertiary education management: students, academic records, administration. https://stackedu.app/dashboard
+- **StackFix** — Repair and field-service management for workshops in Rwanda and Africa: repair tickets, technicians, Mobile Money payments, invoicing. https://stackforgeai.africa/stackfix
+- **StackEDU** — Learning management system (LMS) and student portal for universities, colleges, and TVET institutions: courses, enrollment, grading, academic records, online learning. https://stackedu.app/dashboard
 - **Rwanda Directory** — Registered business directory by industry for discovery across Rwanda. https://kgl.directory
+- **StackForgeNext** — Free software engineering and AI training program for African students: scholarships, bootcamps, and mentorship that build the next generation of tech talent.
 
 ## Services
 
@@ -28,7 +29,7 @@ StackForgeAI builds AI-powered platforms and digital infrastructure for institut
 
 ## Audiences
 
-Schools, universities, vocational workshops, SMEs, enterprises, government agencies, NGOs, and European organizations seeking Africa-first engineering partners.
+Schools, universities, colleges and TVET institutions, students, vocational workshops, SMEs, enterprises, government agencies, NGOs, and European organizations seeking Africa-first engineering partners.
 
 ## Full reference
 
