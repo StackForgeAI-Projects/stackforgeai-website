@@ -139,30 +139,59 @@ function areaServedGraph(): Record<string, unknown>[] {
   ];
 }
 
-function productNodes(orgId: string): Record<string, unknown>[] {
-  return PRODUCT_DEFINITIONS.map((product) => {
-    const node: Record<string, unknown> = {
-      "@type": "SoftwareApplication",
-      "@id": `${baseUrl()}/#product-${product.id}`,
+const productById = (id: string) => PRODUCT_DEFINITIONS.find((product) => product.id === id)!;
+
+/**
+ * Product mentions for StackEDU and Rwanda Directory: referenced as StackForgeAI
+ * products without their own URLs or SoftwareApplication type, so they are not
+ * validated as standalone software-app rich results.
+ */
+function productMentions(): Record<string, unknown>[] {
+  return ["stackedu", "directory"].map((id) => {
+    const product = productById(id);
+    return {
+      "@type": "Product",
       name: product.name,
-      alternateName: [...product.alternateName],
       description: product.description,
-      applicationCategory: product.applicationCategory,
-      applicationSubCategory: product.applicationSubCategory,
-      operatingSystem: "Web",
-      url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
-      provider: { "@id": orgId },
-      audience: {
-        "@type": "Audience",
-        audienceType: product.audience.join(", "),
-      },
-      areaServed: areaServedGraph(),
+      brand: { "@id": `${baseUrl()}/#organization` },
     };
-    if (product.knowsAbout.length > 0) {
-      node.knowsAbout = [...product.knowsAbout];
-    }
-    return node;
   });
+}
+
+/**
+ * StackFix software-application node. Includes offers + applicationCategory +
+ * operatingSystem so it satisfies SoftwareApplication rich-result requirements.
+ */
+function stackfixProductNode(orgId: string): Record<string, unknown> {
+  const product = productById("stackfix");
+  const stackfixUrl = absoluteUrl(siteConfig.links.stackfix);
+  return {
+    "@type": "SoftwareApplication",
+    "@id": `${baseUrl()}/#product-stackfix`,
+    name: product.name,
+    alternateName: [...product.alternateName],
+    description: product.description,
+    applicationCategory: product.applicationCategory,
+    applicationSubCategory: product.applicationSubCategory,
+    operatingSystem: "Web, iOS, Android",
+    url: stackfixUrl,
+    provider: { "@id": orgId },
+    audience: {
+      "@type": "Audience",
+      audienceType: product.audience.join(", "),
+    },
+    areaServed: areaServedGraph(),
+    knowsAbout: [...product.knowsAbout],
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "RWF",
+      lowPrice: "19000",
+      highPrice: "89000",
+      offerCount: 3,
+      availability: "https://schema.org/InStock",
+      url: `${stackfixUrl}#pricing`,
+    },
+  };
 }
 
 /** StackForgeNext free-training program node (EducationalOccupationalProgram). */
@@ -272,16 +301,17 @@ export function rootStructuredDataGraph(): Record<string, unknown> {
         knowsAbout: schemaKnowsAbout,
         areaServed: areaServedGraph(),
         hasOfferCatalog: serviceOfferCatalog(orgId),
+        owns: productMentions(),
         makesOffer: [
-          ...PRODUCT_DEFINITIONS.map((product) => ({
+          {
             "@type": "Offer",
             itemOffered: {
               "@type": "SoftwareApplication",
-              name: product.name,
-              url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
-              description: product.description,
+              name: productById("stackfix").name,
+              url: absoluteUrl(siteConfig.links.stackfix),
+              description: productById("stackfix").description,
             },
-          })),
+          },
           {
             "@type": "Offer",
             price: "0",
@@ -312,7 +342,7 @@ export function rootStructuredDataGraph(): Record<string, unknown> {
           "query-input": "required name=search_term_string",
         },
       },
-      ...productNodes(orgId),
+      stackfixProductNode(orgId),
       stackforgenextNode(orgId),
     ],
   };
@@ -363,27 +393,37 @@ export function homeStructuredDataGraph(): Record<string, unknown> {
         "@type": "ItemList",
         name: "StackForgeAI Products & Programs",
         itemListElement: [
-          ...PRODUCT_DEFINITIONS.map((product, index) => ({
-            "@type": "ListItem",
-            position: index + 1,
-            item: {
-              "@type": "SoftwareApplication",
-              "@id": `${root}/#product-${product.id}`,
-              name: product.name,
-              url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
-              description: product.description,
-            },
-          })),
           {
             "@type": "ListItem",
-            position: PRODUCT_DEFINITIONS.length + 1,
+            position: 1,
+            name: "StackFix",
+            item: { "@id": `${root}/#product-stackfix` },
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "StackEDU",
             item: {
-              "@type": "EducationalOccupationalProgram",
-              "@id": `${root}/#${STACKFORGENEXT_DEFINITION.id}`,
-              name: STACKFORGENEXT_DEFINITION.name,
-              url: root,
-              description: STACKFORGENEXT_DEFINITION.description,
+              "@type": "Thing",
+              name: productById("stackedu").name,
+              description: productById("stackedu").description,
             },
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Rwanda Directory",
+            item: {
+              "@type": "Thing",
+              name: productById("directory").name,
+              description: productById("directory").description,
+            },
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: STACKFORGENEXT_DEFINITION.name,
+            item: { "@id": `${root}/#${STACKFORGENEXT_DEFINITION.id}` },
           },
         ],
       },
