@@ -2,6 +2,8 @@ import { siteConfig } from "@/lib/site";
 import {
   schemaAreaServedCountries,
   schemaKnowsAbout,
+  stackeduSchemaKnowsAbout,
+  stackforgenextSchemaKnowsAbout,
   stackfixSchemaKnowsAbout,
   stackfixSeoKeywords,
 } from "@/lib/seo-keywords";
@@ -16,31 +18,60 @@ const PRODUCT_DEFINITIONS = [
   {
     id: "stackfix",
     name: "StackFix",
+    alternateName: ["StackFix repair app", "StackFix Rwanda"],
     description:
-      "Repair and field-service management: track service requests, assign technicians, and improve operational efficiency.",
+      "Repair and field-service management: track service requests, assign technicians, accept Mobile Money payments, and improve operational efficiency for workshops in Rwanda and Africa.",
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Repair management software",
     url: absoluteUrl(siteConfig.links.stackfix),
     audience: ["Businesses", "Workshops", "Field service teams"],
+    knowsAbout: stackfixSchemaKnowsAbout,
   },
   {
     id: "stackedu",
     name: "StackEDU",
+    alternateName: ["StackEDU LMS", "StackEDU student portal", "StackEDU education platform"],
     description:
-      "Centralized education management for tertiary institutions: student data, academic records, and administrative workflows.",
+      "Learning management system (LMS) and student portal for higher institutions in Rwanda and Africa: courses, enrollment, grading, academic records, online learning, and administrative workflows for universities, colleges, and TVET institutes.",
     applicationCategory: "EducationalApplication",
+    applicationSubCategory: "Learning Management System (LMS)",
     url: siteConfig.links.stackedu,
-    audience: ["Universities", "Colleges", "Training institutes", "Schools"],
+    audience: [
+      "Universities",
+      "Colleges",
+      "TVET institutes",
+      "Higher education institutions",
+      "Students",
+    ],
+    knowsAbout: stackeduSchemaKnowsAbout,
   },
   {
     id: "directory",
     name: "Rwanda Directory",
+    alternateName: ["Kigali Directory"],
     description:
       "Digital directory of registered businesses across Rwanda, categorized by industry for discovery and visibility.",
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Business directory platform",
     url: siteConfig.links.directory,
     audience: ["SMEs", "Businesses", "Marketplaces"],
+    knowsAbout: [] as string[],
   },
 ] as const;
+
+/**
+ * StackForgeNext — free software & AI training program for African students.
+ * Modeled as an EducationalOccupationalProgram. `url` points to the homepage until
+ * the dedicated `/stackforgenext` page ships, then update to that canonical path.
+ */
+const STACKFORGENEXT_DEFINITION = {
+  id: "stackforgenext",
+  name: "StackForgeNext",
+  alternateName: ["StackForge Next", "StackForgeNext Academy"],
+  description:
+    "StackForgeNext is StackForgeAI's free software engineering and AI training program for African students — scholarships, bootcamps, and mentorship that build the next generation of tech talent across Rwanda and Africa.",
+  occupationalCategory: ["Software Developer", "AI Engineer", "Web Developer", "Data Analyst"],
+} as const;
 
 const SERVICE_DEFINITIONS = [
   {
@@ -68,12 +99,22 @@ const FAQ_ENTRIES = [
   {
     question: "Which products does StackForgeAI offer?",
     answer:
-      "StackFix (repair management), StackEDU (tertiary education management), and Rwanda Directory (business discovery). We also offer custom software development and AI consulting.",
+      "StackFix (repair and workshop management), StackEDU (a learning management system and student portal for higher institutions), Rwanda Directory (business discovery), and StackForgeNext (free tech training for African students). We also offer custom software development and AI consulting.",
+  },
+  {
+    question: "Does StackForgeAI offer a learning management system (LMS)?",
+    answer:
+      "Yes. StackEDU is StackForgeAI's LMS and student portal for universities, colleges, and TVET institutions in Rwanda and Africa, covering courses, enrollment, grading, academic records, and online learning in one educational portal.",
+  },
+  {
+    question: "Does StackForgeAI offer free training for African students?",
+    answer:
+      "Yes. StackForgeNext is our free software engineering and AI training program for African students, offering scholarships, bootcamps, and mentorship to build the next generation of tech talent across Rwanda and Africa.",
   },
   {
     question: "Who does StackForgeAI serve?",
     answer:
-      "Schools, universities, workshops, SMEs, enterprises, and government agencies across Africa, with European organizations as a primary partner audience for custom delivery and digital transformation.",
+      "Schools, universities, workshops, SMEs, enterprises, students, and government agencies across Africa, with European organizations as a primary partner audience for custom delivery and digital transformation.",
   },
   {
     question: "Where is StackForgeAI located?",
@@ -99,21 +140,55 @@ function areaServedGraph(): Record<string, unknown>[] {
 }
 
 function productNodes(orgId: string): Record<string, unknown>[] {
-  return PRODUCT_DEFINITIONS.map((product) => ({
-    "@type": "SoftwareApplication",
-    "@id": `${baseUrl()}/#product-${product.id}`,
-    name: product.name,
-    description: product.description,
-    applicationCategory: product.applicationCategory,
-    operatingSystem: "Web",
-    url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
+  return PRODUCT_DEFINITIONS.map((product) => {
+    const node: Record<string, unknown> = {
+      "@type": "SoftwareApplication",
+      "@id": `${baseUrl()}/#product-${product.id}`,
+      name: product.name,
+      alternateName: [...product.alternateName],
+      description: product.description,
+      applicationCategory: product.applicationCategory,
+      applicationSubCategory: product.applicationSubCategory,
+      operatingSystem: "Web",
+      url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
+      provider: { "@id": orgId },
+      audience: {
+        "@type": "Audience",
+        audienceType: product.audience.join(", "),
+      },
+      areaServed: areaServedGraph(),
+    };
+    if (product.knowsAbout.length > 0) {
+      node.knowsAbout = [...product.knowsAbout];
+    }
+    return node;
+  });
+}
+
+/** StackForgeNext free-training program node (EducationalOccupationalProgram). */
+function stackforgenextNode(orgId: string): Record<string, unknown> {
+  return {
+    "@type": "EducationalOccupationalProgram",
+    "@id": `${baseUrl()}/#${STACKFORGENEXT_DEFINITION.id}`,
+    name: STACKFORGENEXT_DEFINITION.name,
+    alternateName: [...STACKFORGENEXT_DEFINITION.alternateName],
+    description: STACKFORGENEXT_DEFINITION.description,
+    url: baseUrl(),
     provider: { "@id": orgId },
-    audience: {
-      "@type": "Audience",
-      audienceType: product.audience.join(", "),
-    },
+    educationalProgramMode: "online",
+    programType: "Free tech training and talent development",
+    occupationalCategory: [...STACKFORGENEXT_DEFINITION.occupationalCategory],
+    educationalCredentialAwarded: "Certificate of completion",
+    knowsAbout: stackforgenextSchemaKnowsAbout,
     areaServed: areaServedGraph(),
-  }));
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "RWF",
+      category: "Free training / scholarship",
+      availability: "https://schema.org/InStock",
+    },
+  };
 }
 
 function serviceOfferCatalog(orgId: string): Record<string, unknown> {
@@ -197,15 +272,28 @@ export function rootStructuredDataGraph(): Record<string, unknown> {
         knowsAbout: schemaKnowsAbout,
         areaServed: areaServedGraph(),
         hasOfferCatalog: serviceOfferCatalog(orgId),
-        makesOffer: PRODUCT_DEFINITIONS.map((product) => ({
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "SoftwareApplication",
-            name: product.name,
-            url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
-            description: product.description,
+        makesOffer: [
+          ...PRODUCT_DEFINITIONS.map((product) => ({
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "SoftwareApplication",
+              name: product.name,
+              url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
+              description: product.description,
+            },
+          })),
+          {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "RWF",
+            category: "Free training / scholarship",
+            itemOffered: {
+              "@type": "EducationalOccupationalProgram",
+              name: STACKFORGENEXT_DEFINITION.name,
+              description: STACKFORGENEXT_DEFINITION.description,
+            },
           },
-        })),
+        ],
       },
       {
         "@type": "WebSite",
@@ -225,6 +313,7 @@ export function rootStructuredDataGraph(): Record<string, unknown> {
         },
       },
       ...productNodes(orgId),
+      stackforgenextNode(orgId),
     ],
   };
 }
@@ -272,18 +361,31 @@ export function homeStructuredDataGraph(): Record<string, unknown> {
       },
       {
         "@type": "ItemList",
-        name: "StackForgeAI Products",
-        itemListElement: PRODUCT_DEFINITIONS.map((product, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          item: {
-            "@type": "SoftwareApplication",
-            "@id": `${root}/#product-${product.id}`,
-            name: product.name,
-            url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
-            description: product.description,
+        name: "StackForgeAI Products & Programs",
+        itemListElement: [
+          ...PRODUCT_DEFINITIONS.map((product, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+              "@type": "SoftwareApplication",
+              "@id": `${root}/#product-${product.id}`,
+              name: product.name,
+              url: product.id === "stackfix" ? absoluteUrl(siteConfig.links.stackfix) : product.url,
+              description: product.description,
+            },
+          })),
+          {
+            "@type": "ListItem",
+            position: PRODUCT_DEFINITIONS.length + 1,
+            item: {
+              "@type": "EducationalOccupationalProgram",
+              "@id": `${root}/#${STACKFORGENEXT_DEFINITION.id}`,
+              name: STACKFORGENEXT_DEFINITION.name,
+              url: root,
+              description: STACKFORGENEXT_DEFINITION.description,
+            },
           },
-        })),
+        ],
       },
     ],
   };

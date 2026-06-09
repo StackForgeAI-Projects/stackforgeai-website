@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
-import { stackfixSeoKeywords } from "@/lib/seo-keywords";
+import {
+  stackeduSeoKeywords,
+  stackforgenextSeoKeywords,
+  stackfixSeoKeywords,
+} from "@/lib/seo-keywords";
 import { absoluteUrl } from "@/lib/utils";
 
 /** Public Search Console verification token (also safe to override via env). */
@@ -143,4 +147,34 @@ export function buildStackfixMetadata(): Metadata {
       images: [absoluteUrl("/stackfix/stackfix-dashboard.png")],
     },
   };
+}
+
+/**
+ * StackEDU page metadata (LMS & student portal). Ready for the `/stackedu` page —
+ * pass a different `path`/`image` here when the page ships.
+ */
+export function buildStackeduMetadata(): Metadata {
+  const meta = buildMetadata({
+    absoluteTitle: true,
+    title: siteConfig.seo.stackedu.title,
+    description: siteConfig.seo.stackedu.description,
+    path: "/stackedu",
+  });
+
+  return { ...meta, keywords: [...stackeduSeoKeywords] };
+}
+
+/**
+ * StackForgeNext page metadata (free tech training for African students).
+ * Ready for the `/stackforgenext` page.
+ */
+export function buildStackforgenextMetadata(): Metadata {
+  const meta = buildMetadata({
+    absoluteTitle: true,
+    title: siteConfig.seo.stackforgenext.title,
+    description: siteConfig.seo.stackforgenext.description,
+    path: "/stackforgenext",
+  });
+
+  return { ...meta, keywords: [...stackforgenextSeoKeywords] };
 }

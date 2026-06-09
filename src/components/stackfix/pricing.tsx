@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { TrialModal } from "./trial-modal";
 
 type Cycle = "monthly" | "biannual" | "annual";
@@ -66,8 +67,8 @@ export function Pricing() {
 
   const cycleMeta: Record<Cycle, { label: string; suffix: string; save?: string }> = {
     monthly: { label: "Monthly", suffix: "/ month" },
-    biannual: { label: "6 months", suffix: "/ month", save: "Save 22%" },
-    annual: { label: "Yearly", suffix: "/ month", save: "Save 34%" },
+    biannual: { label: "6 months", suffix: "/ month", save: "22%" },
+    annual: { label: "Yearly", suffix: "/ month", save: "34%" },
   };
 
   const billingNote: Record<Cycle, (p: number) => string> = {
@@ -91,22 +92,22 @@ export function Pricing() {
         </div>
 
         <div className="mb-12 flex justify-center">
-          <div className="glass inline-flex rounded-full p-1 text-sm">
+          <div className="glass grid w-full max-w-md grid-cols-3 rounded-full p-1 text-xs sm:max-w-lg sm:text-sm">
             {(["monthly", "biannual", "annual"] as Cycle[]).map((c) => (
               <button
                 key={c}
+                type="button"
                 onClick={() => setCycle(c)}
-                className={`relative rounded-full px-5 py-2 transition-colors ${
+                className={cn(
+                  "inline-flex items-center justify-center gap-1 rounded-full px-2 py-2 whitespace-nowrap transition-colors sm:px-4",
                   cycle === c
                     ? "bg-brand text-brand-foreground font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                    : "text-muted-foreground hover:text-foreground",
+                )}
               >
                 {cycleMeta[c].label}
                 {cycleMeta[c].save && cycle !== c && (
-                  <span className="text-brand ml-2 text-[10px] tracking-wider uppercase">
-                    {cycleMeta[c].save}
-                  </span>
+                  <span className="text-brand text-[10px] font-semibold">{cycleMeta[c].save}</span>
                 )}
               </button>
             ))}
