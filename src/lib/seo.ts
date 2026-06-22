@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
-import {
-  stackeduSeoKeywords,
-  stackforgenextSeoKeywords,
-  stackfixSeoKeywords,
-} from "@/lib/seo-keywords";
+import { stackeduSeoKeywords, stackforgenextSeoKeywords } from "@/lib/seo-keywords";
 import { absoluteUrl } from "@/lib/utils";
 
 /** Public Search Console verification token (also safe to override via env). */
@@ -112,41 +108,6 @@ export function buildHomeMetadata(): Metadata {
     description: siteConfig.seo.home.description,
     path: "/",
   });
-}
-
-/** StackFix sales landing metadata (archived local route — live site is https://stackfix.app). */
-export function buildStackfixMetadata(): Metadata {
-  const meta = buildMetadata({
-    absoluteTitle: true,
-    title: siteConfig.seo.stackfix.title,
-    description: siteConfig.seo.stackfix.description,
-    path: "/stackfix",
-    image: "/stackfix/stackfix-dashboard.png",
-  });
-
-  return {
-    ...meta,
-    keywords: [...stackfixSeoKeywords],
-    openGraph: {
-      ...meta.openGraph,
-      title: siteConfig.seo.stackfix.title,
-      description: siteConfig.seo.stackfix.description,
-      images: [
-        {
-          url: absoluteUrl("/stackfix/stackfix-dashboard.png"),
-          width: 1024,
-          height: 586,
-          alt: "StackFix repair management dashboard for workshops in Rwanda and Africa",
-        },
-      ],
-    },
-    twitter: {
-      ...meta.twitter,
-      title: siteConfig.seo.stackfix.title,
-      description: siteConfig.seo.stackfix.description,
-      images: [absoluteUrl("/stackfix/stackfix-dashboard.png")],
-    },
-  };
 }
 
 /**

@@ -5,9 +5,7 @@ import {
   stackeduSchemaKnowsAbout,
   stackforgenextSchemaKnowsAbout,
   stackfixSchemaKnowsAbout,
-  stackfixSeoKeywords,
 } from "@/lib/seo-keywords";
-import { stackfixFaqEntries } from "@/lib/stackfix-faq";
 import { absoluteUrl } from "@/lib/utils";
 
 /** Stable fragment IDs for JSON-LD `@graph` linking (same origin). */
@@ -390,129 +388,6 @@ export function homeStructuredDataGraph(): Record<string, unknown> {
             item: { "@id": `${root}/#${STACKFORGENEXT_DEFINITION.id}` },
           },
         ],
-      },
-    ],
-  };
-}
-
-/** StackFix landing page WebPage + SoftwareApplication + FAQ JSON-LD (archived local route only). */
-export function stackfixStructuredDataGraph(): Record<string, unknown> {
-  const root = baseUrl();
-  const orgId = `${root}/#organization`;
-  const webId = `${root}/#website`;
-  const pageId = `${root}/stackfix#webpage`;
-  const productId = `${root}/stackfix#software`;
-  const faqId = `${root}/stackfix#faq`;
-  const breadcrumbId = `${root}/stackfix#breadcrumb`;
-  const stackfixUrl = absoluteUrl("/stackfix");
-  const dashboardImage = absoluteUrl("/stackfix/stackfix-dashboard.png");
-  const mobileImage = absoluteUrl("/stackfix/stackfix-mobile.png");
-
-  const stackfixFaq = stackfixFaqEntries;
-
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "BreadcrumbList",
-        "@id": breadcrumbId,
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "StackForgeAI",
-            item: root,
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "StackFix",
-            item: stackfixUrl,
-          },
-        ],
-      },
-      {
-        "@type": "WebPage",
-        "@id": pageId,
-        url: stackfixUrl,
-        name: siteConfig.seo.stackfix.title,
-        description: siteConfig.seo.stackfix.description,
-        isPartOf: { "@id": webId },
-        about: { "@id": productId },
-        publisher: { "@id": orgId },
-        breadcrumb: { "@id": breadcrumbId },
-        inLanguage: ["en", "rw", "fr"],
-        keywords: stackfixSeoKeywords.join(", "),
-        primaryImageOfPage: {
-          "@type": "ImageObject",
-          url: dashboardImage,
-          width: 1024,
-          height: 586,
-        },
-      },
-      {
-        "@type": "SoftwareApplication",
-        "@id": productId,
-        name: "StackFix",
-        alternateName: ["StackFix repair app", "StackFix Rwanda", "StackFix Africa"],
-        description: siteConfig.seo.stackfix.description,
-        applicationCategory: "BusinessApplication",
-        applicationSubCategory: "Repair management software",
-        operatingSystem: "Web, iOS, Android",
-        url: stackfixUrl,
-        downloadUrl: siteConfig.links.stackfixApp,
-        provider: { "@id": orgId },
-        featureList: [
-          "Repair ticket management",
-          "Technician assignment and tracking",
-          "Mobile Money and MoMo USSD payments",
-          "Customer SMS and WhatsApp notifications",
-          "Invoicing and RRA-ready exports",
-          "AI-assisted device diagnostics",
-          "Multi-location workshop support",
-        ],
-        screenshot: [
-          { "@type": "ImageObject", url: dashboardImage, caption: "StackFix dashboard" },
-          { "@type": "ImageObject", url: mobileImage, caption: "StackFix mobile repair tickets" },
-        ],
-        keywords: stackfixSeoKeywords.join(", "),
-        knowsAbout: stackfixSchemaKnowsAbout,
-        audience: {
-          "@type": "Audience",
-          audienceType:
-            "Repair shops, electronics service centers, phone repair businesses, workshops in Rwanda and Africa",
-        },
-        areaServed: [
-          { "@type": "Place", name: "Africa" },
-          { "@type": "Country", name: "Rwanda", identifier: "RW" },
-          { "@type": "City", name: "Kigali" },
-          ...schemaAreaServedCountries.slice(0, 12).map((code) => ({
-            "@type": "Country",
-            identifier: code,
-          })),
-        ],
-        offers: {
-          "@type": "AggregateOffer",
-          priceCurrency: "USD",
-          lowPrice: "9",
-          highPrice: "32",
-          offerCount: 3,
-          availability: "https://schema.org/InStock",
-          url: `${stackfixUrl}#pricing`,
-        },
-      },
-      {
-        "@type": "FAQPage",
-        "@id": faqId,
-        isPartOf: { "@id": pageId },
-        mainEntity: stackfixFaq.map((entry) => ({
-          "@type": "Question",
-          name: entry.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: entry.answer,
-          },
-        })),
       },
     ],
   };

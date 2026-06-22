@@ -9,7 +9,7 @@ export default defineConfig({
     setupFiles: ["./tests/setup.ts"],
     globals: true,
     include: ["tests/unit/**/*.test.{ts,tsx}"],
-    exclude: ["tests/e2e/**", "node_modules/**", ".next/**", "stackforgeai-main/**"],
+    exclude: ["tests/e2e/**", "node_modules/**", ".next/**", "stackforgeai-main/**", ".local/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],

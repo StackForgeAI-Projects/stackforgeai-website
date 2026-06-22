@@ -65,6 +65,9 @@ pnpm-debug.log*
 # Design reference (Lovable export — read-only, not part of build)
 stackforgeai-main/
 
+# StackFix landing — local only (live product site: https://stackfix.app)
+.local/stackfix/
+
 # Bundle analyzer
 .analyze/
 analyze/

@@ -33,6 +33,7 @@
     "playwright-report",
     "test-results",
     ".next",
-    "out"
+    "out",
+    ".local/**"
   ]
 }

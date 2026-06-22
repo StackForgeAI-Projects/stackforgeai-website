@@ -14,11 +14,6 @@ export const siteConfig = {
       description:
         "Africa-first AI and software company in Kigali: StackFix repair management, the StackEDU LMS for universities, StackForgeNext free tech training for students, Rwanda Directory, plus custom web, mobile, and AI development for institutions and European enterprise partners.",
     },
-    stackfix: {
-      title: "StackFix | Repair App in Rwanda & Africa | Workshop & Ticket Management",
-      description:
-        "StackFix is the repair app built for Rwanda and Africa. Manage repair tickets, technicians, invoices and Mobile Money payments from one platform, for electronics shops, service centers and workshops in Kigali and across the continent.",
-    },
     stackedu: {
       title: "StackEDU | LMS & Student Portal for Universities in Rwanda & Africa",
       description:
