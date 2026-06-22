@@ -1,24 +1,31 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
+import { mainTestimonialAvatars } from "@/lib/testimonial-avatars";
 
 const items = [
   {
     quoteKey: "tm.q1",
-    name: "Aline M.",
-    role: "Operations Lead, Kigali Repair Co.",
-    initials: "AM",
+    name: "Sandrine I.",
+    role: "Director of Digital, Kigali Heights Institute",
+    avatar: mainTestimonialAvatars.sandrine,
   },
   {
     quoteKey: "tm.q2",
-    name: "Jean-Paul K.",
-    role: "Director, Higher Ed Institute",
-    initials: "JK",
+    name: "Eric N.",
+    role: "CTO, Pamoja Fintech",
+    avatar: mainTestimonialAvatars.eric,
   },
-  { quoteKey: "tm.q3", name: "Diane U.", role: "Founder, Rwanda SME Network", initials: "DU" },
+  {
+    quoteKey: "tm.q3",
+    name: "Patrick H.",
+    role: "Founder, AgriConnect",
+    avatar: mainTestimonialAvatars.patrick,
+  },
 ];
 
 export function Testimonials() {
@@ -83,12 +90,13 @@ export function Testimonials() {
                 &ldquo;{t(tm.quoteKey)}&rdquo;
               </blockquote>
               <figcaption className="mt-8 flex items-center gap-3">
-                <div
-                  aria-hidden
-                  className="bg-primary/15 border-primary/30 text-primary flex h-11 w-11 items-center justify-center rounded-full border font-semibold"
-                >
-                  {tm.initials}
-                </div>
+                <Image
+                  src={tm.avatar.src}
+                  alt={tm.avatar.alt}
+                  width={44}
+                  height={44}
+                  className="border-primary/30 h-11 w-11 shrink-0 rounded-full border object-cover"
+                />
                 <div>
                   <div className="text-foreground font-medium">{tm.name}</div>
                   <div className="text-muted-foreground text-sm">{tm.role}</div>

@@ -7,6 +7,10 @@ export const siteNavScrolledBarStyle: CSSProperties = {
   WebkitBackdropFilter: "blur(20px) saturate(160%)",
 };
 
+/** Subtle left/bottom/right outline when pinned on scroll (no top edge against the viewport). */
+export const siteNavScrolledBarClass =
+  "w-full rounded-t-none rounded-b-3xl border-x border-b border-primary/25 px-0 py-3 shadow-[0_16px_48px_-20px_oklch(0_0_0/0.55)]";
+
 /** Fixed header shell — clips horizontal bleed on narrow viewports. */
 export const siteNavHeaderClass = "fixed inset-x-0 top-0 z-50 w-full max-w-[100vw] overflow-x-clip";
 

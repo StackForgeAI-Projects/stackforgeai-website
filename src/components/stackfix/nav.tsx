@@ -9,6 +9,7 @@ import {
   siteNavHeaderClass,
   siteNavLogoLinkClass,
   siteNavRowClass,
+  siteNavScrolledBarClass,
   siteNavScrolledBarStyle,
 } from "@/lib/site-nav-styles";
 import { cn } from "@/lib/utils";
@@ -57,7 +58,7 @@ export function Nav() {
             className={cn(
               "transition-[margin,border-radius,box-shadow,padding] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none",
               scrolled
-                ? "border-brand/50 w-full rounded-t-none rounded-b-3xl border-b px-0 py-3 shadow-[0_16px_48px_-20px_oklch(0_0_0/0.55)]"
+                ? siteNavScrolledBarClass
                 : "glass rounded-full py-2 pr-2 pl-4 shadow-none sm:pl-5",
             )}
             style={scrolled ? siteNavScrolledBarStyle : undefined}

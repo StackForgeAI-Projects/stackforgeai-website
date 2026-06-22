@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGSAP } from "@gsap/react";
 import Cal, { getCalApi } from "@calcom/embed-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
@@ -22,6 +23,37 @@ import { cn } from "@/lib/utils";
 
 const CAL_NAMESPACE = "15min";
 const CAL_LINK = "stackforgeai/15min";
+
+function ContactLink({
+  icon: Icon,
+  href,
+  label,
+  external,
+}: {
+  icon: ComponentType<{ className?: string }>;
+  href?: string;
+  label: string;
+  external?: boolean;
+}) {
+  const Comp = href ? "a" : "div";
+
+  return (
+    <Comp
+      {...(href
+        ? {
+            href,
+            ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
+          }
+        : {})}
+      className="group text-foreground/90 hover:text-primary flex w-full items-center gap-3 transition-colors"
+    >
+      <span className="bg-primary/10 text-primary group-hover:bg-primary/20 grid h-9 w-9 place-items-center rounded-lg transition-colors">
+        <Icon className="h-4 w-4" />
+      </span>
+      <span className="text-sm">{label}</span>
+    </Comp>
+  );
+}
 
 export function Contact() {
   const ref = useRef<HTMLElement>(null);
@@ -115,55 +147,24 @@ export function Contact() {
             </button>{" "}
             {t("contact.p2.2")}
           </p>
-          <div data-contact className="mt-10 space-y-4 text-sm">
-            <a
+          <div data-contact className="mt-10 space-y-3 text-sm">
+            <ContactLink
+              icon={Mail}
               href={`mailto:${siteConfig.contact.email}`}
-              className="text-foreground hover:text-primary flex items-center gap-3 transition"
-            >
-              <span
-                aria-hidden
-                className="glass text-primary flex h-10 w-10 items-center justify-center rounded-xl"
-              >
-                @
-              </span>
-              {siteConfig.contact.email}
-            </a>
-            <a
+              label={siteConfig.contact.email}
+            />
+            <ContactLink
+              icon={Phone}
               href={`tel:${siteConfig.contact.phone.replace(/[^+0-9]/g, "")}`}
-              className="text-foreground hover:text-primary flex items-center gap-3 transition"
-            >
-              <span
-                aria-hidden
-                className="glass text-primary flex h-10 w-10 items-center justify-center rounded-xl"
-              >
-                ☎
-              </span>
-              {siteConfig.contact.phoneDisplay}
-            </a>
-            <a
+              label={siteConfig.contact.phoneDisplay}
+            />
+            <ContactLink
+              icon={WhatsAppIcon}
               href={`https://wa.me/${siteConfig.contact.whatsapp.replace(/[^0-9]/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`WhatsApp ${siteConfig.contact.whatsappDisplay}`}
-              className="text-foreground hover:text-primary flex items-center gap-3 transition"
-            >
-              <span
-                aria-hidden
-                className="glass text-primary flex h-10 w-10 items-center justify-center rounded-xl"
-              >
-                <WhatsAppIcon />
-              </span>
-              {siteConfig.contact.whatsappDisplay}
-            </a>
-            <div className="text-foreground flex items-center gap-3">
-              <span
-                aria-hidden
-                className="glass text-primary flex h-10 w-10 items-center justify-center rounded-xl"
-              >
-                ⌖
-              </span>
-              {t("footer.location")} · Working globally
-            </div>
+              label={siteConfig.contact.whatsappDisplay}
+              external
+            />
+            <ContactLink icon={MapPin} label={`${t("footer.location")} · Working globally`} />
           </div>
         </div>
 

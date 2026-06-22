@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { stackfixDict } from "@/lib/stackfix-i18n";
 import { siteConfig } from "@/lib/site";
 import { buildStackfixMetadata } from "@/lib/seo";
-import { stackfixStructuredDataGraph } from "@/lib/schema";
+import { stackfixFaqEntries } from "@/lib/stackfix-faq";
+import { rootStructuredDataGraph, stackfixStructuredDataGraph } from "@/lib/schema";
 
 describe("stackfix landing config", () => {
   it("exposes all three languages in the dictionary", () => {
@@ -10,12 +11,13 @@ describe("stackfix landing config", () => {
   });
 
   it("has complete nav links for English", () => {
-    expect(stackfixDict.en.nav.links).toHaveLength(5);
+    expect(stackfixDict.en.nav.links).toHaveLength(6);
     expect(stackfixDict.en.nav.links.map((l) => l.href)).toEqual([
       "#features",
       "#product",
       "#how",
       "#pricing",
+      "#faq",
       "#contact",
     ]);
   });
@@ -26,12 +28,20 @@ describe("stackfix landing config", () => {
     expect(stackfixDict.en.hero.ctaSecondary).toBe("See the product");
   });
 
-  it("points site stackfix link to the landing page route", () => {
-    expect(siteConfig.links.stackfix).toBe("/stackfix");
+  it("points site stackfix link to the external product site", () => {
+    expect(siteConfig.links.stackfix).toBe("https://stackfix.app");
     expect(siteConfig.links.stackfixApp).toBe("https://stackfix.app/dashboard");
   });
 
-  it("builds stackfix metadata with Rwanda and Africa repair keywords", () => {
+  it("does not publish stackfix landing JSON-LD on the root org graph", () => {
+    const graph = rootStructuredDataGraph();
+    const nodes = graph["@graph"] as Record<string, unknown>[];
+    const root = siteConfig.url.replace(/\/$/, "");
+    expect(nodes.some((n) => n["@id"] === `${root}/#product-stackfix`)).toBe(false);
+    expect(nodes.some((n) => n["@type"] === "FAQPage")).toBe(false);
+  });
+
+  it("keeps archived stackfix metadata for local source files", () => {
     const meta = buildStackfixMetadata();
     expect(meta.title).toBe(siteConfig.seo.stackfix.title);
     expect(meta.description).toBe(siteConfig.seo.stackfix.description);
@@ -40,7 +50,7 @@ describe("stackfix landing config", () => {
     expect(meta.keywords).toContain("repair app in Africa");
   });
 
-  it("emits expanded structured data for the stackfix page", () => {
+  it("keeps archived stackfix structured data for local source files", () => {
     const graph = stackfixStructuredDataGraph();
     expect(graph["@context"]).toBe("https://schema.org");
     const nodes = graph["@graph"] as Record<string, unknown>[];
@@ -50,6 +60,11 @@ describe("stackfix landing config", () => {
     expect(nodes.some((n) => n["@type"] === "BreadcrumbList")).toBe(true);
     const app = nodes.find((n) => n["@type"] === "SoftwareApplication") as Record<string, unknown>;
     expect(String(app.keywords)).toContain("repair app in Rwanda");
+    const faq = nodes.find((n) => n["@type"] === "FAQPage") as {
+      mainEntity: Array<{ name: string }>;
+    };
+    expect(faq.mainEntity).toHaveLength(stackfixFaqEntries.length);
+    expect(faq.mainEntity[0]?.name).toBe(stackfixFaqEntries[0].question);
   });
 
   it("includes contact form feedback strings in every locale", () => {

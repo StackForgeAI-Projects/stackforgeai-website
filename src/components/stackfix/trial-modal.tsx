@@ -27,7 +27,7 @@ export function TrialModal({
       `StackFix free trial signup | ${data.get("business") || data.get("name")}`,
     );
     const body = encodeURIComponent(
-      `New 14-day free trial signup\n\nName: ${data.get("name")}\nBusiness: ${data.get("business")}\nEmail: ${data.get("email")}\nPhone: ${data.get("phone") || "n/a"}\n\nPlease provision a trial account and send credentials.`,
+      `New 1-month free trial signup\n\nName: ${data.get("name")}\nBusiness: ${data.get("business")}\nEmail: ${data.get("email")}\nPhone: ${data.get("phone") || "n/a"}\n\nPlease provision a trial account and send credentials.`,
     );
     window.location.href = `mailto:hello@stackforgeai.africa?subject=${subject}&body=${body}`;
     setSubmitted(true);
@@ -52,7 +52,7 @@ export function TrialModal({
                 You&apos;re in. Welcome to StackFix.
               </DialogTitle>
               <DialogDescription className="text-center">
-                We&apos;ll set up your 14-day free trial and email your login details within a few
+                We&apos;ll set up your 1-month free trial and email your login details within a few
                 hours. We&apos;ll also send a friendly reminder a few days before your trial ends.
               </DialogDescription>
             </DialogHeader>
@@ -68,7 +68,7 @@ export function TrialModal({
           <>
             <DialogHeader>
               <div className="bg-brand/10 text-brand mb-2 inline-flex items-center gap-2 self-start rounded-full px-3 py-1 text-[11px] font-semibold tracking-wider uppercase">
-                <Sparkles className="h-3.5 w-3.5" /> 14-day free trial
+                <Sparkles className="h-3.5 w-3.5" /> 1-month free trial
               </div>
               <DialogTitle>Start your free trial</DialogTitle>
               <DialogDescription>
@@ -96,7 +96,7 @@ export function TrialModal({
                 type="submit"
                 className="btn-brand inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
               >
-                Start free trial <ArrowRight className="h-4 w-4" />
+                Start Free Trial <ArrowRight className="h-4 w-4" />
               </button>
               <p className="text-muted-foreground text-center text-[11px]">
                 By starting a trial you agree to receive a setup email from StackFix. No payment

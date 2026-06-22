@@ -43,6 +43,7 @@ test.describe("Landing page", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       "Construire des solutions qui",
     );
+    await expect(page.getByRole("heading", { level: 1 }).locator("br")).toHaveCount(0);
   });
 
   test("language switcher applies internal Kinyarwanda copy", async ({ page }) => {
@@ -55,6 +56,7 @@ test.describe("Landing page", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "rw");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Guteza imbere ibisubizo");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Afurika");
+    await expect(page.getByRole("heading", { level: 1 }).locator("br")).toHaveCount(0);
   });
 
   test("contact form blocks invalid submissions", async ({ page }) => {

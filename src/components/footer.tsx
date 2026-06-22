@@ -25,14 +25,17 @@ export function Footer() {
     {
       href: siteConfig.links.stackfix,
       labelKey: "footer.product.stackfix" as const,
+      external: true,
     },
     {
       href: `/#${PRODUCT_SECTION_IDS.stackedu}`,
       labelKey: "footer.product.stackedu" as const,
+      external: false,
     },
     {
       href: `/#${PRODUCT_SECTION_IDS.directory}`,
       labelKey: "footer.product.directory" as const,
+      external: false,
     },
   ];
 
@@ -133,6 +136,8 @@ export function Footer() {
               <li key={p.href}>
                 <Link
                   href={p.href}
+                  target={p.external ? "_blank" : undefined}
+                  rel={p.external ? "noopener noreferrer" : undefined}
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
                   {t(p.labelKey)}

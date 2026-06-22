@@ -29,6 +29,7 @@
   },
   "scripts": {
     "dev": "pnpm exec kill-port 3000; next dev --turbopack --port 3000",
+    "dev:clean": "pnpm exec kill-port 3000; rm -rf .next node_modules/.cache && next dev --turbopack --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

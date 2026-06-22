@@ -7,8 +7,8 @@ import { TrialModal } from "./trial-modal";
 
 type Cycle = "monthly" | "biannual" | "annual";
 
-function fmt(n: number) {
-  return n.toLocaleString("en-US");
+function fmtUsd(n: number) {
+  return `$${n.toLocaleString("en-US")}`;
 }
 
 export function Pricing() {
@@ -20,7 +20,7 @@ export function Pricing() {
       key: "starter",
       name: "Starter",
       pitch: "For solo technicians and new workshops opening their first counter.",
-      prices: { monthly: 29000, biannual: 24000, annual: 19000 },
+      prices: { monthly: 12, biannual: 10, annual: 9 },
       features: [
         "Up to 30 tickets / month",
         "1 technician seat",
@@ -28,14 +28,15 @@ export function Pricing() {
         "Customer SMS notifications",
         "Email & WhatsApp support",
       ],
-      cta: "Start free trial",
+      cta: "Start Free Trial",
       featured: false,
+      trial: true,
     },
     {
       key: "growth",
       name: "Growth",
       pitch: "For established repair shops scaling their team across Kigali.",
-      prices: { monthly: 89000, biannual: 69000, annual: 59000 },
+      prices: { monthly: 32, biannual: 28, annual: 25 },
       features: [
         "Unlimited tickets",
         "Up to 10 technician seats",
@@ -44,8 +45,9 @@ export function Pricing() {
         "Priority WhatsApp support",
         "Custom shop branding",
       ],
-      cta: "Choose Growth",
+      cta: "Start Free Trial",
       featured: true,
+      trial: true,
     },
     {
       key: "enterprise",
@@ -62,19 +64,20 @@ export function Pricing() {
       ],
       cta: "Talk to sales",
       featured: false,
+      trial: false,
     },
   ];
 
   const cycleMeta: Record<Cycle, { label: string; suffix: string; save?: string }> = {
     monthly: { label: "Monthly", suffix: "/ month" },
-    biannual: { label: "6 months", suffix: "/ month", save: "22%" },
-    annual: { label: "Yearly", suffix: "/ month", save: "34%" },
+    biannual: { label: "6 months", suffix: "/ month", save: "10%" },
+    annual: { label: "Yearly", suffix: "/ month", save: "20%" },
   };
 
   const billingNote: Record<Cycle, (p: number) => string> = {
-    monthly: (p) => `Billed RWF ${fmt(p)} every month`,
-    biannual: (p) => `Billed RWF ${fmt(p * 6)} every 6 months`,
-    annual: (p) => `Billed RWF ${fmt(p * 12)} yearly`,
+    monthly: (p) => `Billed ${fmtUsd(p)} every month`,
+    biannual: (p) => `Billed ${fmtUsd(p * 6)} every 6 Months`,
+    annual: (p) => `Billed ${fmtUsd(p * 12)} Yearly`,
   };
 
   return (
@@ -86,8 +89,8 @@ export function Pricing() {
             Honest pricing. <span className="text-muted-foreground">No surprises.</span>
           </h2>
           <p className="text-muted-foreground mt-5">
-            Start free for 14 days. Cancel anytime. All plans include hosting, updates and security.
-            Commit longer and save more.
+            Start free for 1 Month. Cancel anytime. All plans include hosting, backups, updates and
+            security. Commit longer and save more.
           </p>
         </div>
 
@@ -140,7 +143,7 @@ export function Pricing() {
                     <span className="text-4xl font-bold tracking-tight">Custom</span>
                   ) : (
                     <>
-                      <span className="text-4xl font-bold tracking-tight">RWF {fmt(price)}</span>
+                      <span className="text-4xl font-bold tracking-tight">{fmtUsd(price)}</span>
                       <span className="text-muted-foreground text-sm">
                         {cycleMeta[cycle].suffix}
                       </span>
@@ -160,7 +163,7 @@ export function Pricing() {
                   ))}
                 </ul>
 
-                {plan.key === "starter" ? (
+                {plan.trial ? (
                   <button
                     type="button"
                     onClick={() => setTrialOpen(true)}
@@ -186,7 +189,7 @@ export function Pricing() {
         </div>
 
         <p className="text-muted-foreground mt-8 text-center text-xs">
-          Prices in Rwandan Francs (RWF). VAT exclusive. Mobile Money & bank transfer accepted.
+          Prices in dollars. VAT exclusive. Mobile Money & bank transfer accepted.
         </p>
       </div>
       <TrialModal open={trialOpen} onOpenChange={setTrialOpen} />

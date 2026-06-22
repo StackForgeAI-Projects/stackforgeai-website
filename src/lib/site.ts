@@ -50,7 +50,7 @@ export const siteConfig = {
   },
   links: {
     calendly: process.env.NEXT_PUBLIC_CALENDLY_URL ?? "https://calendly.com/stackforgeai/demo",
-    stackfix: "/stackfix",
+    stackfix: "https://stackfix.app",
     stackfixApp: "https://stackfix.app/dashboard",
     stackedu: "https://stackedu.app/dashboard",
     directory: "https://kgl.directory",

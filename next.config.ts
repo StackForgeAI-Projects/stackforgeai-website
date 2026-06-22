@@ -150,6 +150,16 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      {
+        source: "/stackfix",
+        destination: "https://stackfix.app",
+        permanent: true,
+      },
+      {
+        source: "/stackfix/:path*",
+        destination: "https://stackfix.app/:path*",
+        permanent: true,
+      },
     ];
   },
 };

@@ -10,6 +10,7 @@ import { HowItWorks } from "./how-it-works";
 import { Promises } from "./promises";
 import { Pricing } from "./pricing";
 import { Testimonials } from "./testimonials";
+import { Faq } from "./faq";
 import { Contact } from "./contact";
 import { Footer } from "./footer";
 
@@ -27,6 +28,7 @@ export function StackfixLanding() {
           <Promises />
           <Pricing />
           <Testimonials />
+          <Faq />
           <Contact />
         </main>
         <Footer />

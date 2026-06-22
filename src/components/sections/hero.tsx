@@ -19,7 +19,8 @@ const TICKER_ITEMS = [
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
-  const { t } = useLang();
+  const { lang, t } = useLang();
+  const heroTitleMultiline = lang === "en";
 
   useGSAP(
     () => {
@@ -131,11 +132,20 @@ export function Hero() {
           data-hero-anim
           className="font-display mx-auto mt-8 max-w-[56rem] text-5xl leading-[1.05] font-semibold tracking-tight md:text-7xl"
         >
-          {t("hero.title.1")}
-          <br />
-          <span className="text-gradient-green">{t("hero.title.2")}</span> {t("hero.title.3")}
-          <br />
-          {t("hero.title.4")}
+          {heroTitleMultiline ? (
+            <>
+              {t("hero.title.1")}
+              <br />
+              <span className="text-gradient-green">{t("hero.title.2")}</span> {t("hero.title.3")}
+              <br />
+              {t("hero.title.4")}
+            </>
+          ) : (
+            <>
+              {t("hero.title.1")} <span className="text-gradient-green">{t("hero.title.2")}</span>{" "}
+              {t("hero.title.3")} {t("hero.title.4")}
+            </>
+          )}
         </h1>
 
         <p

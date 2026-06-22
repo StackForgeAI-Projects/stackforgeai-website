@@ -31,6 +31,7 @@ const products: Product[] = [
     illustration: "repair",
     cta: true,
     href: siteConfig.links.stackfix,
+    external: true,
   },
   {
     name: "StackEDU",

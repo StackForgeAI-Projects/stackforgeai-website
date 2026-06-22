@@ -114,7 +114,7 @@ export function buildHomeMetadata(): Metadata {
   });
 }
 
-/** StackFix sales landing page metadata. */
+/** StackFix sales landing metadata (archived local route — live site is https://stackfix.app). */
 export function buildStackfixMetadata(): Metadata {
   const meta = buildMetadata({
     absoluteTitle: true,

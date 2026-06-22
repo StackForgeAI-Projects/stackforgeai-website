@@ -7,6 +7,7 @@ import {
   stackfixSchemaKnowsAbout,
   stackfixSeoKeywords,
 } from "@/lib/seo-keywords";
+import { stackfixFaqEntries } from "@/lib/stackfix-faq";
 import { absoluteUrl } from "@/lib/utils";
 
 /** Stable fragment IDs for JSON-LD `@graph` linking (same origin). */
@@ -23,7 +24,7 @@ const PRODUCT_DEFINITIONS = [
       "Repair and field-service management: track service requests, assign technicians, accept Mobile Money payments, and improve operational efficiency for workshops in Rwanda and Africa.",
     applicationCategory: "BusinessApplication",
     applicationSubCategory: "Repair management software",
-    url: absoluteUrl(siteConfig.links.stackfix),
+    url: siteConfig.links.stackfix,
     audience: ["Businesses", "Workshops", "Field service teams"],
     knowsAbout: stackfixSchemaKnowsAbout,
   },
@@ -158,42 +159,6 @@ function productMentions(): Record<string, unknown>[] {
   });
 }
 
-/**
- * StackFix software-application node. Includes offers + applicationCategory +
- * operatingSystem so it satisfies SoftwareApplication rich-result requirements.
- */
-function stackfixProductNode(orgId: string): Record<string, unknown> {
-  const product = productById("stackfix");
-  const stackfixUrl = absoluteUrl(siteConfig.links.stackfix);
-  return {
-    "@type": "SoftwareApplication",
-    "@id": `${baseUrl()}/#product-stackfix`,
-    name: product.name,
-    alternateName: [...product.alternateName],
-    description: product.description,
-    applicationCategory: product.applicationCategory,
-    applicationSubCategory: product.applicationSubCategory,
-    operatingSystem: "Web, iOS, Android",
-    url: stackfixUrl,
-    provider: { "@id": orgId },
-    audience: {
-      "@type": "Audience",
-      audienceType: product.audience.join(", "),
-    },
-    areaServed: areaServedGraph(),
-    knowsAbout: [...product.knowsAbout],
-    offers: {
-      "@type": "AggregateOffer",
-      priceCurrency: "RWF",
-      lowPrice: "19000",
-      highPrice: "89000",
-      offerCount: 3,
-      availability: "https://schema.org/InStock",
-      url: `${stackfixUrl}#pricing`,
-    },
-  };
-}
-
 /** StackForgeNext free-training program node (EducationalOccupationalProgram). */
 function stackforgenextNode(orgId: string): Record<string, unknown> {
   return {
@@ -308,7 +273,7 @@ export function rootStructuredDataGraph(): Record<string, unknown> {
             itemOffered: {
               "@type": "SoftwareApplication",
               name: productById("stackfix").name,
-              url: absoluteUrl(siteConfig.links.stackfix),
+              url: siteConfig.links.stackfix,
               description: productById("stackfix").description,
             },
           },
@@ -342,7 +307,6 @@ export function rootStructuredDataGraph(): Record<string, unknown> {
           "query-input": "required name=search_term_string",
         },
       },
-      stackfixProductNode(orgId),
       stackforgenextNode(orgId),
     ],
   };
@@ -397,7 +361,7 @@ export function homeStructuredDataGraph(): Record<string, unknown> {
             "@type": "ListItem",
             position: 1,
             name: "StackFix",
-            item: { "@id": `${root}/#product-stackfix` },
+            item: siteConfig.links.stackfix,
           },
           {
             "@type": "ListItem",
@@ -431,7 +395,7 @@ export function homeStructuredDataGraph(): Record<string, unknown> {
   };
 }
 
-/** StackFix landing page WebPage + SoftwareApplication + FAQ + Breadcrumb JSON-LD. */
+/** StackFix landing page WebPage + SoftwareApplication + FAQ JSON-LD (archived local route only). */
 export function stackfixStructuredDataGraph(): Record<string, unknown> {
   const root = baseUrl();
   const orgId = `${root}/#organization`;
@@ -444,32 +408,7 @@ export function stackfixStructuredDataGraph(): Record<string, unknown> {
   const dashboardImage = absoluteUrl("/stackfix/stackfix-dashboard.png");
   const mobileImage = absoluteUrl("/stackfix/stackfix-mobile.png");
 
-  const stackfixFaq = [
-    {
-      question: "What is StackFix?",
-      answer:
-        "StackFix is a repair management app for workshops and service centers. Track repair tickets, assign technicians, send customer updates, and accept Mobile Money payments from one platform.",
-    },
-    {
-      question: "Is StackFix a repair app in Rwanda?",
-      answer:
-        "Yes. StackFix is built for repair shops in Rwanda, including Kigali electronics workshops, phone repair stores, and authorized service centers, with RWF pricing, MoMo USSD support, and local language options.",
-    },
-    {
-      question: "Does StackFix work as a repair app in Africa?",
-      answer:
-        "StackFix is designed for repair businesses across Africa: multi-language support, Mobile Money readiness, and workflows tuned for high-volume device repair and field service teams on the continent.",
-    },
-    {
-      question: "Who is StackFix for?",
-      answer:
-        "Electronics repair shops, phone and laptop service centers, authorized resellers, and multi-location workshops that need tickets, technician management, invoicing, and customer notifications in one system.",
-    },
-    {
-      question: "How do I get a StackFix demo?",
-      answer: `Book a free walkthrough at ${stackfixUrl}#contact or email ${siteConfig.contact.email}.`,
-    },
-  ] as const;
+  const stackfixFaq = stackfixFaqEntries;
 
   return {
     "@context": "https://schema.org",
@@ -554,9 +493,9 @@ export function stackfixStructuredDataGraph(): Record<string, unknown> {
         ],
         offers: {
           "@type": "AggregateOffer",
-          priceCurrency: "RWF",
-          lowPrice: "19000",
-          highPrice: "89000",
+          priceCurrency: "USD",
+          lowPrice: "9",
+          highPrice: "32",
           offerCount: 3,
           availability: "https://schema.org/InStock",
           url: `${stackfixUrl}#pricing`,

@@ -183,6 +183,10 @@ export const stackfixSeoKeywords: string[] = [
     "repair shop POS Rwanda",
     "AI repair diagnostics Africa",
     "StackForgeAI StackFix",
+    "StackFix FAQ",
+    "repair shop software free trial",
+    "MoMo USSD repair payments",
+    "repair ticket management Rwanda",
   ]),
 ];
 

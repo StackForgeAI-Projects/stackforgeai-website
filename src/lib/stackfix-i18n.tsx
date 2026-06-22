@@ -12,6 +12,7 @@ export const stackfixDict = {
         { href: "#product", label: "Product" },
         { href: "#how", label: "How It Works" },
         { href: "#pricing", label: "Pricing" },
+        { href: "#faq", label: "FAQ" },
         { href: "#contact", label: "Contact" },
       ],
       cta: "Book a Free Demo",
@@ -161,6 +162,7 @@ export const stackfixDict = {
           name: "Aline M.",
           role: "Operations Lead, Kigali Repair Co.",
           initials: "AM",
+          avatar: "aline",
         },
         {
           quote:
@@ -168,6 +170,7 @@ export const stackfixDict = {
           name: "Jean-Paul K.",
           role: "Owner, FixHub Nyarugenge",
           initials: "JK",
+          avatar: "jeanPaul",
         },
         {
           quote:
@@ -175,6 +178,40 @@ export const stackfixDict = {
           name: "Diane U.",
           role: "Founder, Rwanda SME Network",
           initials: "DU",
+          avatar: "diane",
+        },
+      ],
+    },
+    faq: {
+      tag: "FAQ",
+      title: "Questions repair shop owners ask us",
+      description:
+        "Straight answers about StackFix tickets, Mobile Money, trials, technicians, and AI before you book a demo.",
+      items: [
+        {
+          question: "What is StackFix and who is it for?",
+          answer:
+            "StackFix is StackForgeAI's repair management platform for electronics workshops, phone repair shops, and service centers in Rwanda and across Africa. It unifies repair tickets, technician workflows, invoicing, and customer updates in one web and mobile workspace.",
+        },
+        {
+          question: "Does StackFix support Mobile Money and MoMo USSD payments?",
+          answer:
+            "Yes. StackFix is built for Rwanda's payment reality. Send MoMo USSD (*182#) and Airtel Money payment requests from a repair ticket, track settled payments automatically, and keep invoices aligned with what customers actually paid.",
+        },
+        {
+          question: "How does the 1-month free trial work?",
+          answer:
+            "Start a free trial from any plan with no payment details required. StackForgeAI provisions your shop workspace, helps you onboard tickets and technicians, and sends login details by email. You can cancel anytime during the trial.",
+        },
+        {
+          question: "Can StackFix manage my technicians and repair tickets?",
+          answer:
+            "Yes. Create repair tickets in under a minute, assign jobs to technicians, track turnaround time, and see workload per bench. Growth plans support unlimited tickets and up to 10 technician seats; Enterprise covers multi-location teams.",
+        },
+        {
+          question: "Does StackFix include AI diagnostics and customer notifications?",
+          answer:
+            "Yes. StackFix AI surfaces likely faults from your shop's repair history before a device is opened. Automatic SMS and WhatsApp updates keep customers informed in English, French, or Kinyarwanda, reducing status calls and speeding pickups.",
         },
       ],
     },
@@ -218,6 +255,7 @@ export const stackfixDict = {
         { href: "#product", label: "Igicuruzwa" },
         { href: "#how", label: "Uko Bikora" },
         { href: "#pricing", label: "Ibiciro" },
+        { href: "#faq", label: "Ibibazo" },
         { href: "#contact", label: "Twandikire" },
       ],
       cta: "Saba Demo y'Ubuntu",
@@ -368,6 +406,7 @@ export const stackfixDict = {
           name: "Aline M.",
           role: "Umuyobozi w'Imikorere, Kigali Repair Co.",
           initials: "AM",
+          avatar: "aline",
         },
         {
           quote:
@@ -375,6 +414,7 @@ export const stackfixDict = {
           name: "Jean-Paul K.",
           role: "Nyiri, FixHub Nyarugenge",
           initials: "JK",
+          avatar: "jeanPaul",
         },
         {
           quote:
@@ -382,6 +422,40 @@ export const stackfixDict = {
           name: "Diane U.",
           role: "Uwashinze, Rwanda SME Network",
           initials: "DU",
+          avatar: "diane",
+        },
+      ],
+    },
+    faq: {
+      tag: "Ibibazo",
+      title: "Ibibazo abanyiri atelier batubaza",
+      description:
+        "Ibisubizo byoroshye ku tike za StackFix, Mobile Money, igerageza ry'ubuntu, abakanishi n'AI mbere yo gusaba demo.",
+      items: [
+        {
+          question: "StackFix ni iki kandi ni abahe bayigenewe?",
+          answer:
+            "StackFix ni urubuga rwa StackForgeAI rwo gucunga gusana rwakorewe amashami yo gusana ibikoresho bya elegitoroniki, amaduka yo gusana telefoni n'ibigo by'ubucuruzi mu Rwanda no mu Afrika. Rhuza tike zo gusana, imirimo y'abakanishi, fagitire n'amakuru y'abakiriya mu rubuga n'application imwe.",
+        },
+        {
+          question: "StackFix ifasha Mobile Money na MoMo USSD?",
+          answer:
+            "Yego. StackFix yubatswe ku buryo ubwishyu bukorwa mu Rwanda. Ohereza isaba rya MoMo USSD (*182#) cyangwa Airtel Money uhereye ku tike yo gusana, ukurikirane ubwishyu bwakiriwe mu buryo bwikora kandi ukomeze fagitire zihura n'ibyo abakiriya bishyuye.",
+        },
+        {
+          question: "Igerageza ry'ukwezi 1 ku ubuntu rikora gute?",
+          answer:
+            "Tangira igerageza ry'ubuntu ku giciro icyo ari cyo cyose utari gutanga amakuru y'ubwishyu. StackForgeAI itegura ahantu h'akazi h'atelier yawe, igufasha gushyiraho tike n'abakanishi, ikohereza amakuru yo kwinjira kuri imeri. Ushobora guhagarika igihe icyo ari cyo cyose mu gihe cy'igerageza.",
+        },
+        {
+          question: "StackFix ishobora gucunga abakanishi n'amakosora?",
+          answer:
+            "Yego. Kora tike yo gusana mu munota umwe, ugire akazi abakanishi, ukurikirane igihe cyo kurangiza kandi urebe umurimo ku meza. Gahunda yo gukura ifasha tike zitagira imipaka n'abakanishi kugeza kuri 10; Enterprise ishyigikira amatsinda mu byiciro byinshi.",
+        },
+        {
+          question: "StackFix irimo AI yo gusuzuma n'amatangazo y'abakiriya?",
+          answer:
+            "Yego. StackFix AI igaragaza ibibazo bishoboka mbere y'uko igikoresho gifungurwa, ishingiye ku mateka y'amakosora mu atelier yawe. Ubutumwa bwa SMS na WhatsApp bwikora bubika abakiriya bamenye mu Cyongereza, Igifaransa cyangwa Ikinyarwanda, bigabanya guhamagara no kwihuta gufata.",
         },
       ],
     },
@@ -426,6 +500,7 @@ export const stackfixDict = {
         { href: "#product", label: "Produit" },
         { href: "#how", label: "Comment ça marche" },
         { href: "#pricing", label: "Tarifs" },
+        { href: "#faq", label: "FAQ" },
         { href: "#contact", label: "Contact" },
       ],
       cta: "Réserver une démo",
@@ -576,6 +651,7 @@ export const stackfixDict = {
           name: "Aline M.",
           role: "Responsable opérations, Kigali Repair Co.",
           initials: "AM",
+          avatar: "aline",
         },
         {
           quote:
@@ -583,6 +659,7 @@ export const stackfixDict = {
           name: "Jean-Paul K.",
           role: "Propriétaire, FixHub Nyarugenge",
           initials: "JK",
+          avatar: "jeanPaul",
         },
         {
           quote:
@@ -590,6 +667,40 @@ export const stackfixDict = {
           name: "Diane U.",
           role: "Fondatrice, Rwanda SME Network",
           initials: "DU",
+          avatar: "diane",
+        },
+      ],
+    },
+    faq: {
+      tag: "FAQ",
+      title: "Les questions des ateliers de réparation",
+      description:
+        "Réponses claires sur les tickets StackFix, Mobile Money, essai gratuit, techniciens et IA avant votre démo.",
+      items: [
+        {
+          question: "Qu'est-ce que StackFix et pour qui est-il conçu ?",
+          answer:
+            "StackFix est la plateforme de gestion des réparations de StackForgeAI pour les ateliers d'électronique, les boutiques de réparation de téléphones et les centres de service au Rwanda et en Afrique. Elle unifie tickets, techniciens, facturation et mises à jour clients dans un seul espace web et mobile.",
+        },
+        {
+          question: "StackFix prend-il en charge Mobile Money et MoMo USSD ?",
+          answer:
+            "Oui. StackFix est conçu pour la réalité des paiements au Rwanda. Envoyez des demandes MoMo USSD (*182#) et Airtel Money depuis un ticket, suivez les paiements réglés automatiquement et alignez les factures sur ce que les clients ont payé.",
+        },
+        {
+          question: "Comment fonctionne l'essai gratuit d'un mois ?",
+          answer:
+            "Démarrez un essai gratuit sur n'importe quelle formule sans coordonnées bancaires. StackForgeAI provisionne votre espace atelier, vous aide à intégrer tickets et techniciens, et envoie les identifiants par e-mail. Vous pouvez annuler à tout moment pendant l'essai.",
+        },
+        {
+          question: "StackFix peut-il gérer mes techniciens et tickets de réparation ?",
+          answer:
+            "Oui. Créez un ticket en moins d'une minute, assignez les travaux, suivez les délais et la charge par poste. Les formules Growth couvrent tickets illimités et jusqu'à 10 techniciens ; Enterprise gère les équipes multi-sites.",
+        },
+        {
+          question: "StackFix inclut-il l'IA diagnostique et les notifications clients ?",
+          answer:
+            "Oui. StackFix AI suggère les pannes probables avant l'ouverture de l'appareil, à partir de l'historique de votre atelier. SMS et WhatsApp automatiques informent les clients en anglais, français ou kinyarwanda, réduisant les appels et accélérant les retraits.",
         },
       ],
     },
